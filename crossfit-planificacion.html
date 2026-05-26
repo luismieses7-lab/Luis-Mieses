@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Planificación CrossFit</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,6 +20,14 @@
       border-bottom: 3px solid #e63946;
     }
 
+    .header-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
     header h1 {
       font-size: 2rem;
       font-weight: 800;
@@ -32,22 +36,33 @@
       color: #fff;
     }
 
-    header h1 span {
-      color: #e63946;
-    }
+    header h1 span { color: #e63946; }
+    header p { color: #888; font-size: 0.85rem; margin-top: 4px; margin-bottom: 0; }
 
-    header p {
-      color: #888;
-      font-size: 0.85rem;
+    .unlock-badge {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.75rem;
+      color: #2d9e6b;
+      background: rgba(45,158,107,0.1);
+      border: 1px solid rgba(45,158,107,0.3);
+      border-radius: 20px;
+      padding: 6px 14px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s;
       margin-top: 4px;
-      margin-bottom: 20px;
     }
+    .unlock-badge:hover { background: rgba(45,158,107,0.2); }
+    .unlock-badge.visible { display: flex; }
 
     .days-nav {
       display: flex;
       gap: 4px;
       overflow-x: auto;
       padding-bottom: 0;
+      margin-top: 16px;
     }
 
     .day-btn {
@@ -66,19 +81,10 @@
       position: relative;
       bottom: -3px;
     }
+    .day-btn:hover { color: #fff; background: rgba(230,57,70,0.1); }
+    .day-btn.active { color: #e63946; border-bottom: 3px solid #e63946; background: rgba(230,57,70,0.08); }
 
-    .day-btn:hover {
-      color: #fff;
-      background: rgba(230, 57, 70, 0.1);
-    }
-
-    .day-btn.active {
-      color: #e63946;
-      border-bottom: 3px solid #e63946;
-      background: rgba(230, 57, 70, 0.08);
-    }
-
-    .day-btn .rest-badge {
+    .rest-badge {
       font-size: 0.6rem;
       background: #444;
       color: #aaa;
@@ -87,26 +93,12 @@
       margin-left: 6px;
       vertical-align: middle;
     }
+    .day-btn.active .rest-badge { background: rgba(230,57,70,0.3); color: #e63946; }
 
-    .day-btn.active .rest-badge {
-      background: rgba(230, 57, 70, 0.3);
-      color: #e63946;
-    }
+    main { padding: 32px; max-width: 900px; margin: 0 auto; }
 
-    main {
-      padding: 32px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .day-panel {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-
-    .day-panel.active {
-      display: block;
-    }
+    .day-panel { display: none; animation: fadeIn 0.3s ease; }
+    .day-panel.active { display: block; }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(10px); }
@@ -122,16 +114,8 @@
       gap: 12px;
     }
 
-    .day-title {
-      font-size: 1.8rem;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    .day-title span {
-      color: #e63946;
-    }
+    .day-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
+    .day-title span { color: #e63946; }
 
     .edit-btn {
       padding: 8px 20px;
@@ -146,10 +130,7 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-
-    .edit-btn:hover {
-      background: #c1121f;
-    }
+    .edit-btn:hover { background: #c1121f; }
 
     .save-btn {
       padding: 8px 20px;
@@ -164,10 +145,7 @@
       cursor: pointer;
       transition: background 0.2s;
     }
-
-    .save-btn:hover {
-      background: #1b4332;
-    }
+    .save-btn:hover { background: #1b4332; }
 
     .section-card {
       background: #1a1a1a;
@@ -193,6 +171,13 @@
       font-size: 0.95rem;
     }
 
+    .section-card .content-text a {
+      color: #e63946;
+      text-decoration: none;
+      border-bottom: 1px dotted #e63946;
+    }
+    .section-card .content-text a:hover { color: #ff6b6b; border-bottom-color: #ff6b6b; }
+
     .section-card textarea {
       width: 100%;
       background: #111;
@@ -208,44 +193,66 @@
       outline: none;
       display: none;
     }
+    .section-card textarea:focus { border-color: #e63946; }
 
-    .section-card textarea:focus {
-      border-color: #e63946;
+    /* Sección de videos */
+    .videos-section { border-left: 4px solid #457b9d; }
+    .videos-section h3 { color: #457b9d; }
+
+    .video-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+
+    .video-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #111;
+      border: 1px solid #2a2a2a;
+      border-radius: 8px;
+      padding: 10px 14px;
+      text-decoration: none;
+      color: #f0f0f0;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .video-item:hover { border-color: #457b9d; background: #151f2a; }
+
+    .video-thumb {
+      width: 90px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 4px;
+      flex-shrink: 0;
+      background: #222;
     }
 
-    .rest-day {
-      text-align: center;
-      padding: 60px 20px;
+    .video-thumb-placeholder {
+      width: 90px;
+      height: 52px;
+      background: #222;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 1.4rem;
     }
 
-    .rest-day .icon {
-      font-size: 4rem;
-      margin-bottom: 16px;
-    }
+    .video-info { display: flex; flex-direction: column; gap: 2px; }
+    .video-info .v-title { font-size: 0.9rem; font-weight: 600; color: #f0f0f0; }
+    .video-info .v-url { font-size: 0.75rem; color: #666; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 300px; }
 
-    .rest-day h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      color: #555;
-      letter-spacing: 3px;
-    }
-
-    .rest-day p {
-      color: #444;
-      margin-top: 8px;
-      font-size: 0.9rem;
-    }
+    .video-hint { font-size: 0.78rem; color: #555; margin-top: 8px; line-height: 1.5; }
 
     .wod-highlight {
       background: linear-gradient(135deg, #1e0a0a, #2a0d0d);
       border: 1px solid #4a1010;
       border-left: 4px solid #e63946;
     }
+    .wod-highlight h3 { font-size: 0.85rem; }
 
-    .wod-highlight h3 {
-      font-size: 0.85rem;
-    }
+    .rest-day { text-align: center; padding: 60px 20px; }
+    .rest-day .icon { font-size: 4rem; margin-bottom: 16px; }
+    .rest-day h2 { font-size: 1.5rem; font-weight: 700; text-transform: uppercase; color: #555; letter-spacing: 3px; }
+    .rest-day p { color: #444; margin-top: 8px; font-size: 0.9rem; }
 
     .week-banner {
       background: linear-gradient(135deg, #1a1a1a, #111);
@@ -257,14 +264,7 @@
       align-items: center;
       gap: 16px;
     }
-
-    .week-banner .week-label {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #666;
-    }
-
+    .week-banner .week-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #666; }
     .week-banner input {
       background: transparent;
       border: none;
@@ -274,20 +274,95 @@
       font-weight: 700;
       padding: 4px 0;
       outline: none;
-      width: 200px;
+      width: 220px;
     }
+    .week-banner input:focus { border-bottom-color: #e63946; }
+    .week-banner input[readonly] { cursor: default; pointer-events: none; }
 
-    .week-banner input:focus {
-      border-bottom-color: #e63946;
+    /* Modal contraseña */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
     }
+    .modal-overlay.visible { display: flex; animation: fadeIn 0.2s ease; }
+
+    .modal-box {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-top: 3px solid #e63946;
+      border-radius: 12px;
+      padding: 32px;
+      width: 340px;
+      text-align: center;
+    }
+    .modal-box .lock-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .modal-box h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
+    .modal-box p { font-size: 0.8rem; color: #666; margin-bottom: 20px; }
+    .modal-box input[type="password"] {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #f0f0f0;
+      font-size: 1rem;
+      padding: 10px 14px;
+      outline: none;
+      margin-bottom: 12px;
+      letter-spacing: 3px;
+    }
+    .modal-box input[type="password"]:focus { border-color: #e63946; }
+    .error-msg { color: #e63946; font-size: 0.8rem; margin-bottom: 10px; min-height: 18px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: center; }
+    .btn-confirm {
+      flex: 1; padding: 10px; background: #e63946; color: #fff; border: none;
+      border-radius: 6px; font-weight: 700; font-size: 0.85rem;
+      text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+    }
+    .btn-confirm:hover { background: #c1121f; }
+    .btn-cancel {
+      flex: 1; padding: 10px; background: #2a2a2a; color: #aaa; border: none;
+      border-radius: 6px; font-weight: 700; font-size: 0.85rem;
+      text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+    }
+    .btn-cancel:hover { background: #333; }
   </style>
 </head>
 <body>
 
+<!-- Modal contraseña -->
+<div class="modal-overlay" id="pwd-modal">
+  <div class="modal-box">
+    <div class="lock-icon">🔒</div>
+    <h2>Modo edición</h2>
+    <p>Introduce tu contraseña para editar la planificación</p>
+    <input type="password" id="pwd-input" placeholder="••••••••"
+           onkeydown="if(event.key==='Enter') confirmPwd()" />
+    <div class="error-msg" id="pwd-error"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closePwdModal()">Cancelar</button>
+      <button class="btn-confirm" onclick="confirmPwd()">Desbloquear</button>
+    </div>
+  </div>
+</div>
+
 <header>
-  <h1>Cross<span>Fit</span> &mdash; Planificación</h1>
-  <p>Semana de entrenamiento personalizada</p>
-  <nav class="days-nav">
+  <div class="header-top">
+    <div>
+      <h1>Cross<span>Fit</span> &mdash; Planificación</h1>
+      <p>Semana de entrenamiento personalizada</p>
+    </div>
+    <button class="unlock-badge" id="unlock-badge"
+            title="Sesión desbloqueada — clic para bloquear"
+            onclick="lockSession()">
+      🔓 Desbloqueado — bloquear
+    </button>
+  </div>
+  <nav class="days-nav" style="margin-top:16px">
     <button class="day-btn active" onclick="showDay('lunes', this)">Lunes</button>
     <button class="day-btn" onclick="showDay('martes', this)">Martes</button>
     <button class="day-btn" onclick="showDay('miercoles', this)">Miércoles</button>
@@ -300,10 +375,9 @@
 
 <main>
 
-  <!-- SEMANA -->
   <div class="week-banner">
     <span class="week-label">Semana</span>
-    <input type="text" id="semana-input" placeholder="Ej: 26 May – 1 Jun 2025" />
+    <input type="text" id="semana-input" placeholder="Ej: 26 May – 1 Jun 2025" readonly />
   </div>
 
   <!-- LUNES -->
@@ -344,6 +418,15 @@ Empezar al 70% 1RM, aumentar si la técnica es buena.</div>
 - 2 min hamstring stretch
 - Foam roller cuádriceps 1 min</div>
       <textarea id="lunes-cooldown-edit"></textarea>
+    </div>
+    <div class="section-card videos-section">
+      <h3>🎥 Videos de referencia</h3>
+      <ul class="video-list" id="lunes-videos-list"></ul>
+      <div id="lunes-videos-edit-area" style="display:none">
+        <p class="video-hint">Escribe un enlace por línea. Formato: <strong>Nombre del ejercicio | URL de YouTube</strong><br>
+        Ejemplo: Pull-up técnica | https://www.youtube.com/watch?v=...</p>
+        <textarea id="lunes-videos-edit" style="display:block;margin-top:10px;min-height:80px"></textarea>
+      </div>
     </div>
   </div>
 
@@ -389,6 +472,14 @@ Cap: 15 min
 - Wrist mobility 1 min</div>
       <textarea id="martes-cooldown-edit"></textarea>
     </div>
+    <div class="section-card videos-section">
+      <h3>🎥 Videos de referencia</h3>
+      <ul class="video-list" id="martes-videos-list"></ul>
+      <div id="martes-videos-edit-area" style="display:none">
+        <p class="video-hint">Formato: <strong>Nombre | URL de YouTube</strong></p>
+        <textarea id="martes-videos-edit" style="display:block;margin-top:10px;min-height:80px"></textarea>
+      </div>
+    </div>
   </div>
 
   <!-- MIÉRCOLES -->
@@ -428,6 +519,14 @@ Foco: barra cerca del cuerpo, activar lats antes de jalar.</div>
 - Glute bridge 2 × 15
 - Thoracic foam roller 2 min</div>
       <textarea id="miercoles-cooldown-edit"></textarea>
+    </div>
+    <div class="section-card videos-section">
+      <h3>🎥 Videos de referencia</h3>
+      <ul class="video-list" id="miercoles-videos-list"></ul>
+      <div id="miercoles-videos-edit-area" style="display:none">
+        <p class="video-hint">Formato: <strong>Nombre | URL de YouTube</strong></p>
+        <textarea id="miercoles-videos-edit" style="display:block;margin-top:10px;min-height:80px"></textarea>
+      </div>
     </div>
   </div>
 
@@ -470,6 +569,14 @@ Pausa 2 seg en el fondo.</div>
 - Ankle mobility drill 2 min</div>
       <textarea id="jueves-cooldown-edit"></textarea>
     </div>
+    <div class="section-card videos-section">
+      <h3>🎥 Videos de referencia</h3>
+      <ul class="video-list" id="jueves-videos-list"></ul>
+      <div id="jueves-videos-edit-area" style="display:none">
+        <p class="video-hint">Formato: <strong>Nombre | URL de YouTube</strong></p>
+        <textarea id="jueves-videos-edit" style="display:block;margin-top:10px;min-height:80px"></textarea>
+      </div>
+    </div>
   </div>
 
   <!-- VIERNES -->
@@ -510,6 +617,14 @@ Foco en la recepción y el split jerk.</div>
 - Banded shoulder distraction 2 min
 - 5 min stretching libre</div>
       <textarea id="viernes-cooldown-edit"></textarea>
+    </div>
+    <div class="section-card videos-section">
+      <h3>🎥 Videos de referencia</h3>
+      <ul class="video-list" id="viernes-videos-list"></ul>
+      <div id="viernes-videos-edit-area" style="display:none">
+        <p class="video-hint">Formato: <strong>Nombre | URL de YouTube</strong></p>
+        <textarea id="viernes-videos-edit" style="display:block;margin-top:10px;min-height:80px"></textarea>
+      </div>
     </div>
   </div>
 
@@ -554,12 +669,21 @@ Puntaje: rondas totales completadas.</div>
 - Hidratación + recuperación activa</div>
       <textarea id="sabado-cooldown-edit"></textarea>
     </div>
+    <div class="section-card videos-section">
+      <h3>🎥 Videos de referencia</h3>
+      <ul class="video-list" id="sabado-videos-list"></ul>
+      <div id="sabado-videos-edit-area" style="display:none">
+        <p class="video-hint">Formato: <strong>Nombre | URL de YouTube</strong></p>
+        <textarea id="sabado-videos-edit" style="display:block;margin-top:10px;min-height:80px"></textarea>
+      </div>
+    </div>
   </div>
 
   <!-- DOMINGO -->
   <div id="panel-domingo" class="day-panel">
     <div class="day-header">
       <div class="day-title">Domingo <span>/ Descanso</span></div>
+      <button class="edit-btn" onclick="toggleEdit('domingo')">Editar notas</button>
     </div>
     <div class="rest-day">
       <div class="icon">🛌</div>
@@ -574,7 +698,6 @@ Puntaje: rondas totales completadas.</div>
 - Dormir 8 horas</div>
       <textarea id="domingo-notas-edit"></textarea>
     </div>
-    <button class="edit-btn" style="margin-top:8px" onclick="toggleEdit('domingo')">Editar notas</button>
   </div>
 
 </main>
@@ -582,7 +705,7 @@ Puntaje: rondas totales completadas.</div>
 <script>
   const DAYS = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
 
-  const SECTIONS = {
+  const TEXT_SECTIONS = {
     lunes:     ['calentamiento','wod','fuerza','cooldown'],
     martes:    ['calentamiento','wod','fuerza','cooldown'],
     miercoles: ['calentamiento','wod','fuerza','cooldown'],
@@ -592,83 +715,272 @@ Puntaje: rondas totales completadas.</div>
     domingo:   ['notas'],
   };
 
-  let editing = {};
+  const DAYS_WITH_VIDEOS = ['lunes','martes','miercoles','jueves','viernes','sabado'];
 
+  // ── Contraseña ──────────────────────────────────────────────────────────────
+  // Contraseña por defecto: crossfit2025
+  // Para cambiarla: abre la consola del navegador y escribe:
+  //   cambiarContrasena('nueva_clave')
+  const DEFAULT_PWD = 'crossfit2025';
+  let sessionUnlocked = false;
+  let pendingCallback = null;
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  async function getStoredHash() {
+    let h = localStorage.getItem('cf_pwd_hash');
+    if (!h) {
+      h = await sha256(DEFAULT_PWD);
+      localStorage.setItem('cf_pwd_hash', h);
+    }
+    return h;
+  }
+
+  window.cambiarContrasena = async function(nueva) {
+    if (!sessionUnlocked) { alert('Debes estar desbloqueado primero.'); return; }
+    const h = await sha256(nueva);
+    localStorage.setItem('cf_pwd_hash', h);
+    alert('Contraseña cambiada correctamente.');
+  };
+
+  function requireAuth(callback) {
+    if (sessionUnlocked) { callback(); return; }
+    pendingCallback = callback;
+    openPwdModal();
+  }
+
+  function openPwdModal() {
+    document.getElementById('pwd-input').value = '';
+    document.getElementById('pwd-error').textContent = '';
+    document.getElementById('pwd-modal').classList.add('visible');
+    setTimeout(() => document.getElementById('pwd-input').focus(), 100);
+  }
+
+  function closePwdModal() {
+    document.getElementById('pwd-modal').classList.remove('visible');
+    pendingCallback = null;
+  }
+
+  async function confirmPwd() {
+    const input = document.getElementById('pwd-input').value;
+    if (!input) return;
+    const hash = await sha256(input);
+    const stored = await getStoredHash();
+    if (hash === stored) {
+      sessionUnlocked = true;
+      document.getElementById('unlock-badge').classList.add('visible');
+      closePwdModal();
+      if (pendingCallback) { pendingCallback(); pendingCallback = null; }
+    } else {
+      document.getElementById('pwd-error').textContent = 'Contraseña incorrecta';
+      document.getElementById('pwd-input').value = '';
+      document.getElementById('pwd-input').focus();
+    }
+  }
+
+  function lockSession() {
+    sessionUnlocked = false;
+    document.getElementById('unlock-badge').classList.remove('visible');
+    DAYS.forEach(day => { if (editing[day]) saveDay(day); });
+  }
+
+  document.getElementById('pwd-modal').addEventListener('click', e => {
+    if (e.target.id === 'pwd-modal') closePwdModal();
+  });
+
+  // ── Navegación de días ──────────────────────────────────────────────────────
   function showDay(day, btn) {
-    DAYS.forEach(d => {
-      document.getElementById('panel-' + d).classList.remove('active');
-    });
+    DAYS.forEach(d => document.getElementById('panel-' + d).classList.remove('active'));
     document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
     document.getElementById('panel-' + day).classList.add('active');
     btn.classList.add('active');
   }
 
-  function toggleEdit(day) {
-    const sections = SECTIONS[day];
-    const isEditing = editing[day];
+  // ── Edición ─────────────────────────────────────────────────────────────────
+  let editing = {};
 
-    if (!isEditing) {
-      sections.forEach(sec => {
-        const display = document.getElementById(day + '-' + sec);
-        const textarea = document.getElementById(day + '-' + sec + '-edit');
-        textarea.value = display.textContent;
-        display.style.display = 'none';
-        textarea.style.display = 'block';
-      });
-      const btn = document.querySelector('#panel-' + day + ' .edit-btn');
-      if (btn) {
-        btn.textContent = 'Guardar';
-        btn.classList.remove('edit-btn');
-        btn.classList.add('save-btn');
-        btn.setAttribute('onclick', "toggleEdit('" + day + "')");
-      }
-      editing[day] = true;
-    } else {
-      sections.forEach(sec => {
-        const display = document.getElementById(day + '-' + sec);
-        const textarea = document.getElementById(day + '-' + sec + '-edit');
-        display.textContent = textarea.value;
-        textarea.style.display = 'none';
-        display.style.display = '';
-        saveToStorage(day, sec, textarea.value);
-      });
-      const btn = document.querySelector('#panel-' + day + ' .save-btn');
-      if (btn) {
-        btn.textContent = 'Editar';
-        btn.classList.remove('save-btn');
-        btn.classList.add('edit-btn');
-        btn.setAttribute('onclick', "toggleEdit('" + day + "')");
-      }
-      editing[day] = false;
+  function toggleEdit(day) {
+    requireAuth(() => {
+      if (!editing[day]) openDay(day);
+      else saveDay(day);
+    });
+  }
+
+  function openDay(day) {
+    TEXT_SECTIONS[day].forEach(sec => {
+      const display = document.getElementById(day + '-' + sec);
+      const ta = document.getElementById(day + '-' + sec + '-edit');
+      ta.value = display.textContent;
+      display.style.display = 'none';
+      ta.style.display = 'block';
+    });
+
+    if (DAYS_WITH_VIDEOS.includes(day)) {
+      const editArea = document.getElementById(day + '-videos-edit-area');
+      const ta = document.getElementById(day + '-videos-edit');
+      const stored = loadVideos(day);
+      ta.value = stored.map(v => v.label + ' | ' + v.url).join('\n');
+      document.getElementById(day + '-videos-list').style.display = 'none';
+      editArea.style.display = 'block';
+    }
+
+    const btn = document.querySelector('#panel-' + day + ' .edit-btn');
+    if (btn) {
+      btn.textContent = 'Guardar';
+      btn.classList.replace('edit-btn', 'save-btn');
+    }
+    editing[day] = true;
+
+    if (day === 'domingo') {
+      const semInput = document.getElementById('semana-input');
+      semInput.removeAttribute('readonly');
     }
   }
 
-  function saveToStorage(day, section, value) {
-    try {
-      localStorage.setItem('cf_' + day + '_' + section, value);
-    } catch(e) {}
+  function saveDay(day) {
+    TEXT_SECTIONS[day].forEach(sec => {
+      const display = document.getElementById(day + '-' + sec);
+      const ta = document.getElementById(day + '-' + sec + '-edit');
+      display.textContent = ta.value;
+      ta.style.display = 'none';
+      display.style.display = '';
+      try { localStorage.setItem('cf_' + day + '_' + sec, ta.value); } catch(e) {}
+    });
+
+    if (DAYS_WITH_VIDEOS.includes(day)) {
+      const ta = document.getElementById(day + '-videos-edit');
+      const parsed = parseVideos(ta.value);
+      saveVideos(day, parsed);
+      renderVideos(day, parsed);
+      document.getElementById(day + '-videos-list').style.display = '';
+      document.getElementById(day + '-videos-edit-area').style.display = 'none';
+    }
+
+    const btn = document.querySelector('#panel-' + day + ' .save-btn');
+    if (btn) {
+      btn.textContent = 'Editar';
+      btn.classList.replace('save-btn', 'edit-btn');
+    }
+    editing[day] = false;
+
+    const semInput = document.getElementById('semana-input');
+    semInput.setAttribute('readonly', true);
+    try { localStorage.setItem('cf_semana', semInput.value); } catch(e) {}
   }
 
-  function loadFromStorage() {
+  // ── Videos ──────────────────────────────────────────────────────────────────
+  function getYouTubeId(url) {
+    try {
+      const u = new URL(url);
+      if (u.hostname.includes('youtu.be')) return u.pathname.slice(1);
+      return u.searchParams.get('v');
+    } catch { return null; }
+  }
+
+  function parseVideos(raw) {
+    return raw.split('\n')
+      .map(line => line.trim())
+      .filter(line => line.includes('|'))
+      .map(line => {
+        const [label, ...rest] = line.split('|');
+        return { label: label.trim(), url: rest.join('|').trim() };
+      })
+      .filter(v => v.label && v.url);
+  }
+
+  function renderVideos(day, videos) {
+    const list = document.getElementById(day + '-videos-list');
+    list.innerHTML = '';
+    if (!videos.length) {
+      list.innerHTML = '<li style="color:#555;font-size:0.82rem">Sin videos aún. Haz clic en Editar para añadir.</li>';
+      return;
+    }
+    videos.forEach(v => {
+      const ytId = getYouTubeId(v.url);
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = v.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.className = 'video-item';
+
+      if (ytId) {
+        const img = document.createElement('img');
+        img.src = 'https://img.youtube.com/vi/' + ytId + '/mqdefault.jpg';
+        img.className = 'video-thumb';
+        img.alt = v.label;
+        img.onerror = function() {
+          this.style.display='none';
+          const ph = document.createElement('div');
+          ph.className = 'video-thumb-placeholder';
+          ph.textContent = '▶';
+          this.parentElement.insertBefore(ph, this);
+        };
+        a.appendChild(img);
+      } else {
+        const ph = document.createElement('div');
+        ph.className = 'video-thumb-placeholder';
+        ph.textContent = '🔗';
+        a.appendChild(ph);
+      }
+
+      const info = document.createElement('div');
+      info.className = 'video-info';
+      info.innerHTML = '<span class="v-title">' + escHtml(v.label) + '</span>'
+                     + '<span class="v-url">' + escHtml(v.url) + '</span>';
+      a.appendChild(info);
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+  }
+
+  function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function saveVideos(day, videos) {
+    try { localStorage.setItem('cf_' + day + '_videos', JSON.stringify(videos)); } catch(e) {}
+  }
+
+  function loadVideos(day) {
+    try {
+      const s = localStorage.getItem('cf_' + day + '_videos');
+      return s ? JSON.parse(s) : [];
+    } catch { return []; }
+  }
+
+  // ── Campo semana ────────────────────────────────────────────────────────────
+  document.getElementById('semana-input').addEventListener('click', function() {
+    if (this.hasAttribute('readonly')) {
+      requireAuth(() => {
+        this.removeAttribute('readonly');
+        this.focus();
+      });
+    }
+  });
+
+  // ── Carga inicial ───────────────────────────────────────────────────────────
+  function loadAll() {
     DAYS.forEach(day => {
-      const sections = SECTIONS[day];
-      sections.forEach(sec => {
+      TEXT_SECTIONS[day].forEach(sec => {
         const saved = localStorage.getItem('cf_' + day + '_' + sec);
         if (saved !== null) {
           const el = document.getElementById(day + '-' + sec);
           if (el) el.textContent = saved;
         }
       });
+      if (DAYS_WITH_VIDEOS.includes(day)) {
+        renderVideos(day, loadVideos(day));
+      }
     });
     const semana = localStorage.getItem('cf_semana');
     if (semana) document.getElementById('semana-input').value = semana;
   }
 
-  document.getElementById('semana-input').addEventListener('input', function() {
-    try { localStorage.setItem('cf_semana', this.value); } catch(e) {}
-  });
-
-  loadFromStorage();
+  loadAll();
 </script>
 
 </body>
