@@ -151,19 +151,87 @@
       letter-spacing: 2px;
       color: #e63946;
     }
-    /* hint de formato en modo edición */
-    .edit-hint {
+    /* botón insertar video */
+    .insert-vid-btn {
       display: none;
-      font-size: 0.7rem;
-      color: #555;
-      background: #111;
-      border: 1px dashed #333;
-      border-radius: 6px;
-      padding: 5px 10px;
-      line-height: 1.5;
+      align-items: center;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px dashed rgba(230,57,70,0.4);
+      border-radius: 20px;
+      color: #e63946;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
     }
-    .edit-hint code { color: #888; background: #1a1a1a; padding: 1px 4px; border-radius: 3px; }
-    .edit-hint.visible { display: block; }
+    .insert-vid-btn:hover { background: rgba(230,57,70,0.1); border-color: #e63946; }
+    .insert-vid-btn.visible { display: inline-flex; }
+
+    /* mini-modal de URL */
+    .url-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+    }
+    .url-modal.visible { display: flex; animation: fadeIn 0.15s ease; }
+    .url-modal-box {
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-top: 3px solid #e63946;
+      border-radius: 10px;
+      padding: 24px;
+      width: 420px;
+      max-width: 95vw;
+    }
+    .url-modal-box h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #e63946;
+      margin-bottom: 14px;
+    }
+    .url-modal-box label {
+      display: block;
+      font-size: 0.75rem;
+      color: #666;
+      margin-bottom: 5px;
+    }
+    .url-modal-box input[type="text"] {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #f0f0f0;
+      font-size: 0.9rem;
+      padding: 9px 12px;
+      outline: none;
+      margin-bottom: 14px;
+    }
+    .url-modal-box input[type="text"]:focus { border-color: #e63946; }
+    .url-modal-box .url-actions { display: flex; gap: 8px; justify-content: flex-end; }
+    .url-insert-btn {
+      padding: 8px 18px;
+      background: #e63946; color: #fff; border: none;
+      border-radius: 6px; font-weight: 700; font-size: 0.8rem;
+      text-transform: uppercase; cursor: pointer;
+    }
+    .url-insert-btn:hover { background: #c1121f; }
+    .url-cancel-btn {
+      padding: 8px 18px;
+      background: #2a2a2a; color: #aaa; border: none;
+      border-radius: 6px; font-weight: 700; font-size: 0.8rem;
+      text-transform: uppercase; cursor: pointer;
+    }
+    .url-cancel-btn:hover { background: #333; }
 
     /* contenido renderizado */
     .content-text {
@@ -374,6 +442,21 @@
   </div>
 </div>
 
+<!-- Mini-modal insertar link de video -->
+<div class="url-modal" id="url-modal">
+  <div class="url-modal-box">
+    <h4>🎬 Insertar link de video</h4>
+    <label>Nombre del ejercicio (opcional — se insertará donde está el cursor)</label>
+    <input type="text" id="url-exercise" placeholder="Ej: Thruster" />
+    <label>URL del video (YouTube u otro)</label>
+    <input type="text" id="url-link" placeholder="https://www.youtube.com/watch?v=..." />
+    <div class="url-actions">
+      <button class="url-cancel-btn" onclick="closeUrlModal()">Cancelar</button>
+      <button class="url-insert-btn" onclick="doInsertVideo()">Insertar</button>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="header-top">
     <div>
@@ -568,6 +651,19 @@ function getRawText(day, key) {
 }
 
 // ─── Construcción del panel ───────────────────────────────────────────────────
+function secCard(day, key, cssClass, icon, label, placeholder) {
+  return `
+    <div class="section-card ${cssClass}">
+      <div class="sec-header"><h3>${icon} ${label}</h3></div>
+      <div class="content-text" id="${day}-${key}"></div>
+      <textarea id="${day}-${key}-edit" placeholder="${placeholder}"></textarea>
+      <button class="insert-vid-btn" id="${day}-${key}-vidbtn"
+              onclick="openUrlModal('${day}-${key}-edit')">
+        🎬 Insertar "ver video"
+      </button>
+    </div>`;
+}
+
 function buildDayPanel(day) {
   const panel = document.getElementById('panel-' + day);
   const [title, sub] = DAY_LABELS[day].split(' / ');
@@ -577,80 +673,40 @@ function buildDayPanel(day) {
       <button class="edit-btn" id="${day}-edit-btn" onclick="toggleEdit('${day}')">Editar</button>
     </div>
 
-    <!-- CALENTAMIENTO -->
-    <div class="section-card sec-calentamiento">
-      <div class="sec-header">
-        <h3>🔥 Calentamiento</h3>
-        <span class="edit-hint" id="${day}-calentamiento-hint">Para añadir video: escribe el nombre del ejercicio y pega la URL entre corchetes<br><code>Ejercicio [https://youtube.com/...]</code></span>
-      </div>
-      <div class="content-text" id="${day}-calentamiento"></div>
-      <textarea id="${day}-calentamiento-edit" placeholder="Describe el calentamiento...&#10;Ej: - Thruster [https://youtube.com/...]"></textarea>
-    </div>
+    ${secCard(day,'calentamiento','sec-calentamiento','🔥','Calentamiento','Describe el calentamiento...')}
 
     <div class="note-bridge">
       <div class="note-text" id="${day}-nota1"></div>
       <textarea id="${day}-nota1-edit" placeholder="Nota para el atleta..."></textarea>
     </div>
 
-    <!-- LEVANTAMIENTO -->
-    <div class="section-card sec-levantamiento">
-      <div class="sec-header">
-        <h3>🏋️ Levantamiento</h3>
-        <span class="edit-hint" id="${day}-levantamiento-hint">Para añadir video: <code>Ejercicio [https://youtube.com/...]</code></span>
-      </div>
-      <div class="content-text" id="${day}-levantamiento"></div>
-      <textarea id="${day}-levantamiento-edit" placeholder="Series, repeticiones, % de 1RM..."></textarea>
-    </div>
+    ${secCard(day,'levantamiento','sec-levantamiento','🏋️','Levantamiento','Series, repeticiones, % de 1RM...')}
 
     <div class="note-bridge">
       <div class="note-text" id="${day}-nota2"></div>
       <textarea id="${day}-nota2-edit" placeholder="Nota para el atleta..."></textarea>
     </div>
 
-    <!-- WORKOUT 1 -->
-    <div class="section-card sec-workout">
-      <div class="sec-header">
-        <h3>⚡ Workout 1</h3>
-        <span class="edit-hint" id="${day}-workout1-hint">Para añadir video: <code>Ejercicio [https://youtube.com/...]</code></span>
-      </div>
-      <div class="content-text" id="${day}-workout1"></div>
-      <textarea id="${day}-workout1-edit" placeholder="AMRAP, Para tiempo, EMOM..."></textarea>
-    </div>
+    ${secCard(day,'workout1','sec-workout','⚡','Workout 1','AMRAP, Para tiempo, EMOM...')}
 
     <div class="note-bridge">
       <div class="note-text" id="${day}-nota3"></div>
       <textarea id="${day}-nota3-edit" placeholder="Nota para el atleta..."></textarea>
     </div>
 
-    <!-- WORKOUT 2 toggle -->
     <div class="w2-toggle-row">
       <button class="w2-toggle-btn" id="${day}-w2-btn" onclick="toggleW2('${day}')">＋ Agregar Workout 2</button>
     </div>
 
     <div class="w2-block" id="${day}-w2-block">
-      <div class="section-card sec-workout">
-        <div class="sec-header">
-          <h3>⚡ Workout 2</h3>
-          <span class="edit-hint" id="${day}-workout2-hint">Para añadir video: <code>Ejercicio [https://youtube.com/...]</code></span>
-        </div>
-        <div class="content-text" id="${day}-workout2"></div>
-        <textarea id="${day}-workout2-edit" placeholder="Segundo workout del día..."></textarea>
-      </div>
+      ${secCard(day,'workout2','sec-workout','⚡','Workout 2','Segundo workout del día...')}
       <div class="note-bridge">
         <div class="note-text" id="${day}-nota4"></div>
         <textarea id="${day}-nota4-edit" placeholder="Nota para el atleta..."></textarea>
       </div>
     </div>
 
-    <!-- ACCESORIOS -->
-    <div class="section-card sec-accesorios" style="margin-top:6px">
-      <div class="sec-header">
-        <h3>💪 Accesorios</h3>
-        <span class="edit-hint" id="${day}-accesorios-hint">Para añadir video: <code>Ejercicio [https://youtube.com/...]</code></span>
-      </div>
-      <div class="content-text" id="${day}-accesorios"></div>
-      <textarea id="${day}-accesorios-edit" placeholder="Ejercicios accesorios, core, movilidad..."></textarea>
-    </div>
+    ${secCard(day,'accesorios','sec-accesorios','💪','Accesorios','Ejercicios accesorios, core, movilidad...')}
   `;
 }
 
@@ -665,18 +721,16 @@ function toggleEdit(day) {
 }
 
 function doOpen(day) {
-  // Secciones de texto
   MAIN_SECS.forEach(k => {
     const display = document.getElementById(day + '-' + k);
     const ta      = document.getElementById(day + '-' + k + '-edit');
-    const hint    = document.getElementById(day + '-' + k + '-hint');
+    const vidbtn  = document.getElementById(day + '-' + k + '-vidbtn');
     if (!display || !ta) return;
     ta.value = getRawText(day, k);
     display.style.display = 'none';
     ta.style.display = 'block';
-    if (hint) hint.classList.add('visible');
+    if (vidbtn) vidbtn.classList.add('visible');
   });
-  // Notas
   NOTE_KEYS.forEach(k => {
     const display = document.getElementById(day + '-' + k);
     const ta      = document.getElementById(day + '-' + k + '-edit');
@@ -685,7 +739,6 @@ function doOpen(day) {
     display.style.display = 'none';
     ta.style.display = 'block';
   });
-
   document.getElementById('semana-input').removeAttribute('readonly');
   const btn = document.getElementById(day + '-edit-btn');
   if (btn) { btn.textContent = 'Guardar'; btn.className = 'save-btn'; }
@@ -696,13 +749,13 @@ function doSave(day) {
   MAIN_SECS.forEach(k => {
     const display = document.getElementById(day + '-' + k);
     const ta      = document.getElementById(day + '-' + k + '-edit');
-    const hint    = document.getElementById(day + '-' + k + '-hint');
+    const vidbtn  = document.getElementById(day + '-' + k + '-vidbtn');
     if (!display || !ta) return;
     const raw = ta.value;
     display.innerHTML = renderContent(raw);
     ta.style.display = 'none';
     display.style.display = '';
-    if (hint) hint.classList.remove('visible');
+    if (vidbtn) vidbtn.classList.remove('visible');
     try { localStorage.setItem('cf_' + day + '_' + k, raw); } catch(e) {}
   });
   NOTE_KEYS.forEach(k => {
@@ -783,6 +836,61 @@ function loadDay(day) {
     if (block) { block.classList.add('visible'); btn.classList.add('active'); btn.textContent = '✕ Quitar Workout 2'; }
   }
 }
+
+// ─── URL modal (insertar ver video) ──────────────────────────────────────────
+let activeTextareaId = null;
+
+function openUrlModal(taId) {
+  activeTextareaId = taId;
+  document.getElementById('url-exercise').value = '';
+  document.getElementById('url-link').value = '';
+  document.getElementById('url-modal').classList.add('visible');
+  setTimeout(() => document.getElementById('url-exercise').focus(), 80);
+}
+
+function closeUrlModal() {
+  document.getElementById('url-modal').classList.remove('visible');
+  activeTextareaId = null;
+}
+
+function doInsertVideo() {
+  const exercise = document.getElementById('url-exercise').value.trim();
+  const url      = document.getElementById('url-link').value.trim();
+  if (!url) { document.getElementById('url-link').focus(); return; }
+
+  const ta = document.getElementById(activeTextareaId);
+  if (!ta) { closeUrlModal(); return; }
+
+  const insert = exercise ? `${exercise} [${url}]` : `[${url}]`;
+  const start  = ta.selectionStart;
+  const end    = ta.selectionEnd;
+  // Si hay texto seleccionado, envuelve la selección con el link
+  if (start !== end) {
+    const selected = ta.value.substring(start, end);
+    const replacement = `${selected} [${url}]`;
+    ta.value = ta.value.substring(0, start) + replacement + ta.value.substring(end);
+    ta.selectionStart = ta.selectionEnd = start + replacement.length;
+  } else {
+    // Insertar en la posición del cursor, en nueva línea si no está al inicio
+    const before = ta.value.substring(0, start);
+    const after  = ta.value.substring(start);
+    const prefix = (before.length > 0 && !before.endsWith('\n')) ? '\n' : '';
+    const suffix = (after.length > 0 && !after.startsWith('\n')) ? '\n' : '';
+    const full   = before + prefix + insert + suffix + after;
+    ta.value = full;
+    const pos = before.length + prefix.length + insert.length;
+    ta.selectionStart = ta.selectionEnd = pos;
+  }
+  ta.focus();
+  closeUrlModal();
+}
+
+document.getElementById('url-modal').addEventListener('click', e => {
+  if (e.target.id === 'url-modal') closeUrlModal();
+});
+document.getElementById('url-link').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doInsertVideo();
+});
 
 function init() {
   DAYS_TRAINING.forEach(day => { buildDayPanel(day); loadDay(day); });
