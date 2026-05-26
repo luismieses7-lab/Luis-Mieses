@@ -4,388 +4,503 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CrossFit — Planificación Randy</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
+    :root {
+      --bg:        #141414;
+      --bg-card:   #1e1e1e;
+      --bg-inner:  #252525;
+      --bg-row:    #2a2a2a;
+      --lime:      #c8f500;
+      --lime-dim:  rgba(200,245,0,0.15);
+      --lime-glow: rgba(200,245,0,0.25);
+      --green:     #4ade80;
+      --text:      #ffffff;
+      --text-sec:  #888888;
+      --text-dim:  #555555;
+      --border:    rgba(255,255,255,0.06);
+      --radius:    14px;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #0d0d0d;
-      color: #f0f0f0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
     }
 
-    /* ── Header ── */
-    header {
-      background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
-      padding: 24px 32px 0;
-      border-bottom: 3px solid #e63946;
-    }
-    .header-top {
+    /* ── Topbar ── */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(20,20,20,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+      height: 60px;
+      gap: 16px;
     }
-    header h1 {
-      font-size: 2rem;
+    .topbar-left { display: flex; flex-direction: column; }
+    .topbar-title {
+      font-size: 1.05rem;
       font-weight: 800;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: #fff;
+      letter-spacing: 0.5px;
+      line-height: 1.1;
     }
-    header h1 span { color: #e63946; }
-    header p { color: #888; font-size: 0.85rem; margin-top: 4px; }
+    .topbar-title span { color: var(--lime); }
+    .topbar-week {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: var(--text-sec);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-top: 2px;
+    }
+    .topbar-week input {
+      background: none;
+      border: none;
+      color: var(--text-sec);
+      font: inherit;
+      font-size: 0.68rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      outline: none;
+      width: 200px;
+      cursor: default;
+    }
+    .topbar-week input[readonly] { pointer-events: none; }
+    .topbar-week input:not([readonly]) { color: var(--lime); cursor: text; }
 
     .unlock-badge {
       display: none;
       align-items: center;
       gap: 6px;
-      font-size: 0.75rem;
-      color: #2d9e6b;
-      background: rgba(45,158,107,0.1);
-      border: 1px solid rgba(45,158,107,0.3);
+      padding: 5px 12px;
+      background: rgba(74,222,128,0.1);
+      border: 1px solid rgba(74,222,128,0.3);
       border-radius: 20px;
-      padding: 6px 14px;
+      color: var(--green);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       cursor: pointer;
       white-space: nowrap;
       transition: background 0.2s;
-      margin-top: 4px;
     }
-    .unlock-badge:hover { background: rgba(45,158,107,0.2); }
+    .unlock-badge:hover { background: rgba(74,222,128,0.18); }
     .unlock-badge.visible { display: flex; }
 
+    /* ── Días nav ── */
     .days-nav {
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
       display: flex;
-      gap: 4px;
       overflow-x: auto;
-      margin-top: 16px;
+      padding: 0 16px;
+      scrollbar-width: none;
     }
+    .days-nav::-webkit-scrollbar { display: none; }
     .day-btn {
       flex-shrink: 0;
-      padding: 12px 24px;
-      background: transparent;
-      color: #aaa;
+      padding: 14px 18px;
+      background: none;
       border: none;
-      border-bottom: 3px solid transparent;
-      font-size: 0.85rem;
+      border-bottom: 2px solid transparent;
+      color: var(--text-sec);
+      font-family: inherit;
+      font-size: 0.78rem;
       font-weight: 700;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
-      letter-spacing: 1px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
       position: relative;
-      bottom: -3px;
+      bottom: -1px;
     }
-    .day-btn:hover { color: #fff; background: rgba(230,57,70,0.1); }
-    .day-btn.active { color: #e63946; border-bottom: 3px solid #e63946; background: rgba(230,57,70,0.08); }
+    .day-btn:hover { color: var(--text); }
+    .day-btn.active { color: var(--lime); border-bottom-color: var(--lime); }
     .rest-badge {
-      font-size: 0.6rem;
-      background: #444;
-      color: #aaa;
+      font-size: 0.55rem;
+      background: #333;
+      color: #666;
       border-radius: 4px;
       padding: 1px 5px;
-      margin-left: 6px;
+      margin-left: 5px;
       vertical-align: middle;
     }
-    .day-btn.active .rest-badge { background: rgba(230,57,70,0.3); color: #e63946; }
+    .day-btn.active .rest-badge { background: var(--lime-dim); color: var(--lime); }
 
-    /* ── Layout principal ── */
-    main { padding: 32px; max-width: 900px; margin: 0 auto; }
+    /* ── Main ── */
+    main {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 24px 20px 60px;
+    }
 
-    .day-panel { display: none; animation: fadeIn 0.3s ease; }
+    .day-panel { display: none; animation: fadeUp 0.25s ease; }
     .day-panel.active { display: block; }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    /* ── Day header ── */
     .day-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 10px;
     }
-    .day-title { font-size: 1.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; }
-    .day-title span { color: #e63946; }
-
+    .day-meta { display: flex; flex-direction: column; gap: 2px; }
+    .day-label {
+      font-size: 1.6rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+    }
+    .day-label span { color: var(--lime); }
+    .day-sublabel {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--text-sec);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
     .edit-btn {
-      padding: 8px 20px;
-      background: #e63946; color: #fff; border: none;
-      border-radius: 6px; font-size: 0.8rem; font-weight: 700;
-      letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 18px;
+      background: var(--lime-dim);
+      border: 1px solid var(--lime-glow);
+      border-radius: 8px;
+      color: var(--lime);
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
       transition: background 0.2s;
     }
-    .edit-btn:hover { background: #c1121f; }
+    .edit-btn:hover { background: rgba(200,245,0,0.22); }
     .save-btn {
-      padding: 8px 20px;
-      background: #2d6a4f; color: #fff; border: none;
-      border-radius: 6px; font-size: 0.8rem; font-weight: 700;
-      letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 18px;
+      background: rgba(74,222,128,0.12);
+      border: 1px solid rgba(74,222,128,0.35);
+      border-radius: 8px;
+      color: var(--green);
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
       transition: background 0.2s;
     }
-    .save-btn:hover { background: #1b4332; }
+    .save-btn:hover { background: rgba(74,222,128,0.22); }
 
-    /* ── Sección card ── */
+    /* ── Section card ── */
     .section-card {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 10px;
-      padding: 20px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 8px;
     }
-    .section-card .sec-header {
+
+    .card-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-      flex-wrap: wrap;
-      gap: 8px;
+      gap: 12px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
     }
-    .section-card h3 {
-      font-size: 0.72rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #e63946;
+    .card-badge {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.95rem;
+      flex-shrink: 0;
     }
+    .badge-lime    { background: var(--lime); }
+    .badge-blue    { background: #1d4ed8; }
+    .badge-red     { background: #dc2626; }
+    .badge-purple  { background: #7c3aed; }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      flex: 1;
+    }
+
+    .card-body {
+      padding: 16px 18px;
+    }
+
+    /* contenido renderizado */
+    .content-text {
+      font-size: 0.92rem;
+      line-height: 1.9;
+      color: #ddd;
+      white-space: pre-wrap;
+    }
+    .content-text:empty::after { content: '—'; color: var(--text-dim); }
+
+    /* números resaltados: patrones como 5×5, 70%, 42.5kg, etc. */
+    .content-text .num { color: var(--lime); font-weight: 600; }
+
+    /* link "ver video" inline */
+    .vid-link {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px;
+      color: var(--bg);
+      background: var(--lime);
+      border-radius: 10px;
+      padding: 2px 8px;
+      text-decoration: none;
+      vertical-align: middle;
+      margin-left: 6px;
+      transition: opacity 0.15s;
+    }
+    .vid-link:hover { opacity: 0.85; }
+
+    /* textarea edición */
+    .section-card textarea {
+      display: none;
+      width: 100%;
+      background: var(--bg-inner);
+      border: 1px solid rgba(200,245,0,0.2);
+      border-radius: 8px;
+      color: #f0f0f0;
+      font-family: inherit;
+      font-size: 0.92rem;
+      line-height: 1.8;
+      padding: 12px 14px;
+      resize: vertical;
+      min-height: 90px;
+      outline: none;
+      margin-top: 4px;
+    }
+    .section-card textarea:focus { border-color: var(--lime); }
+
     /* botón insertar video */
     .insert-vid-btn {
       display: none;
       align-items: center;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 10px;
       padding: 6px 14px;
       background: transparent;
-      border: 1px dashed rgba(230,57,70,0.4);
+      border: 1px dashed rgba(200,245,0,0.3);
       border-radius: 20px;
-      color: #e63946;
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.5px;
-      cursor: pointer;
-      transition: background 0.15s, border-color 0.15s;
-    }
-    .insert-vid-btn:hover { background: rgba(230,57,70,0.1); border-color: #e63946; }
-    .insert-vid-btn.visible { display: inline-flex; }
-
-    /* mini-modal de URL */
-    .url-modal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      z-index: 2000;
-      align-items: center;
-      justify-content: center;
-    }
-    .url-modal.visible { display: flex; animation: fadeIn 0.15s ease; }
-    .url-modal-box {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-top: 3px solid #e63946;
-      border-radius: 10px;
-      padding: 24px;
-      width: 420px;
-      max-width: 95vw;
-    }
-    .url-modal-box h4 {
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #e63946;
-      margin-bottom: 14px;
-    }
-    .url-modal-box label {
-      display: block;
-      font-size: 0.75rem;
-      color: #666;
-      margin-bottom: 5px;
-    }
-    .url-modal-box input[type="text"] {
-      width: 100%;
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 6px;
-      color: #f0f0f0;
-      font-size: 0.9rem;
-      padding: 9px 12px;
-      outline: none;
-      margin-bottom: 14px;
-    }
-    .url-modal-box input[type="text"]:focus { border-color: #e63946; }
-    .url-modal-box .url-actions { display: flex; gap: 8px; justify-content: flex-end; }
-    .url-insert-btn {
-      padding: 8px 18px;
-      background: #e63946; color: #fff; border: none;
-      border-radius: 6px; font-weight: 700; font-size: 0.8rem;
-      text-transform: uppercase; cursor: pointer;
-    }
-    .url-insert-btn:hover { background: #c1121f; }
-    .url-cancel-btn {
-      padding: 8px 18px;
-      background: #2a2a2a; color: #aaa; border: none;
-      border-radius: 6px; font-weight: 700; font-size: 0.8rem;
-      text-transform: uppercase; cursor: pointer;
-    }
-    .url-cancel-btn:hover { background: #333; }
-
-    /* contenido renderizado */
-    .content-text {
-      color: #ccc;
-      line-height: 2;
-      font-size: 0.95rem;
-    }
-    .content-text:empty::after { content: '—'; color: #333; }
-
-    /* link inline de video */
-    .vid-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
+      color: var(--lime);
+      font-family: inherit;
       font-size: 0.72rem;
       font-weight: 700;
       letter-spacing: 0.5px;
-      color: #e63946;
-      background: rgba(230,57,70,0.1);
-      border: 1px solid rgba(230,57,70,0.3);
-      border-radius: 12px;
-      padding: 2px 9px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .insert-vid-btn:hover { background: var(--lime-dim); }
+    .insert-vid-btn.visible { display: inline-flex; }
+
+    /* miniaturas de video */
+    .video-thumbs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 12px 18px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .video-thumb-item {
+      position: relative;
+      width: 130px;
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
       text-decoration: none;
-      vertical-align: middle;
-      margin-left: 6px;
-      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
     }
-    .vid-link:hover { background: rgba(230,57,70,0.22); border-color: rgba(230,57,70,0.6); }
-    .vid-link svg { flex-shrink: 0; }
-
-    /* textarea edición */
-    .section-card textarea {
-      width: 100%;
-      background: #111;
-      border: 1px solid #333;
-      border-radius: 6px;
-      color: #f0f0f0;
-      font-family: inherit;
-      font-size: 0.95rem;
-      line-height: 1.8;
-      padding: 12px;
-      resize: vertical;
-      min-height: 90px;
-      outline: none;
-      display: none;
+    .video-thumb-item img {
+      width: 100%; height: 74px;
+      object-fit: cover;
+      display: block;
     }
-    .section-card textarea:focus { border-color: #e63946; }
+    .video-thumb-placeholder-img {
+      width: 100%; height: 74px;
+      background: var(--bg-row);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem;
+    }
+    .video-play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s;
+    }
+    .video-thumb-item:hover .video-play-overlay { background: rgba(0,0,0,0.15); }
+    .play-circle {
+      width: 28px; height: 28px;
+      background: rgba(200,245,0,0.9);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .play-circle svg { margin-left: 2px; }
+    .video-name {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(0,0,0,0.75));
+      padding: 12px 8px 5px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      color: #fff;
+    }
 
-    /* colores por tipo */
-    .sec-calentamiento  { border-left: 4px solid #f4a261; }
-    .sec-calentamiento h3 { color: #f4a261; }
-    .sec-levantamiento  { border-left: 4px solid #a8dadc; }
-    .sec-levantamiento h3 { color: #a8dadc; }
-    .sec-workout        { border-left: 4px solid #e63946; background: linear-gradient(135deg,#1e0a0a,#1a1a1a); }
-    .sec-workout h3     { color: #e63946; }
-    .sec-accesorios     { border-left: 4px solid #9b72cf; }
-    .sec-accesorios h3  { color: #9b72cf; }
-
-    /* ── Nota entre secciones ── */
+    /* ── Nota bridge ── */
     .note-bridge {
       position: relative;
-      margin: 6px 0;
-      padding: 10px 16px 10px 44px;
-      background: rgba(255,214,0,0.04);
-      border: 1px dashed rgba(255,214,0,0.15);
-      border-radius: 8px;
-      min-height: 38px;
+      margin: 4px 0;
+      padding: 10px 16px 10px 42px;
+      background: rgba(255,214,0,0.03);
+      border: 1px dashed rgba(255,214,0,0.12);
+      border-radius: 10px;
+      min-height: 36px;
     }
     .note-bridge::before {
       content: '📝';
       position: absolute;
-      left: 14px; top: 50%;
+      left: 12px; top: 50%;
       transform: translateY(-50%);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     .note-bridge .note-text {
-      color: #b5a000;
-      font-size: 0.85rem;
+      color: #c8a800;
+      font-size: 0.82rem;
       line-height: 1.6;
       white-space: pre-wrap;
-      min-height: 16px;
     }
     .note-bridge .note-text:empty::after { content: 'Sin nota'; color: #2e2700; font-style: italic; }
     .note-bridge textarea {
+      display: none;
       width: 100%;
       background: transparent;
       border: none;
-      border-bottom: 1px dashed rgba(255,214,0,0.25);
+      border-bottom: 1px dashed rgba(200,160,0,0.3);
       color: #e6c800;
       font-family: inherit;
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       line-height: 1.6;
       padding: 2px 0;
       resize: vertical;
-      min-height: 36px;
+      min-height: 32px;
       outline: none;
-      display: none;
     }
-    .note-bridge textarea::placeholder { color: rgba(230,200,0,0.25); }
-    .note-bridge textarea:focus { border-bottom-color: rgba(255,214,0,0.5); }
+    .note-bridge textarea:focus { border-bottom-color: rgba(200,160,0,0.6); }
 
     /* ── Workout 2 toggle ── */
     .w2-toggle-row {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       margin: 6px 0;
     }
     .w2-toggle-btn {
-      padding: 7px 18px;
+      padding: 7px 16px;
       background: transparent;
-      border: 1px dashed #2a2a2a;
+      border: 1px dashed #333;
       border-radius: 20px;
       color: #444;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 1px;
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       text-transform: uppercase;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .w2-toggle-btn:hover { border-color: #e63946; color: #e63946; }
-    .w2-toggle-btn.active { border-color: #e63946; color: #e63946; background: rgba(230,57,70,0.06); }
-
+    .w2-toggle-btn:hover { border-color: var(--lime); color: var(--lime); }
+    .w2-toggle-btn.active { border-color: var(--lime); color: var(--lime); background: var(--lime-dim); }
     .w2-block { display: none; }
     .w2-block.visible { display: block; }
 
     /* ── Descanso ── */
-    .rest-day { text-align: center; padding: 50px 20px 30px; }
-    .rest-day .icon { font-size: 4rem; margin-bottom: 16px; }
-    .rest-day h2 { font-size: 1.5rem; font-weight: 700; text-transform: uppercase; color: #555; letter-spacing: 3px; }
-    .rest-day p { color: #444; margin-top: 8px; font-size: 0.9rem; }
+    .rest-screen {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .rest-icon-wrap {
+      width: 80px; height: 80px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+      margin-bottom: 20px;
+    }
+    .rest-title {
+      font-size: 1.4rem; font-weight: 900;
+      text-transform: uppercase; letter-spacing: 3px;
+      color: #333; margin-bottom: 8px;
+    }
+    .rest-sub { font-size: 0.85rem; color: #3a3a3a; }
 
-    /* ── Semana ── */
-    .week-banner {
-      background: #1a1a1a;
-      border: 1px solid #2a2a2a;
-      border-radius: 10px;
-      padding: 14px 24px;
-      margin-bottom: 28px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
+    /* ── URL mini-modal ── */
+    .url-modal {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.75); z-index: 2000;
+      align-items: center; justify-content: center;
     }
-    .week-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: #555; }
-    .week-banner input {
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid #2a2a2a;
-      color: #fff; font-size: 1rem; font-weight: 700;
-      padding: 4px 0; outline: none; width: 240px;
+    .url-modal.visible { display: flex; animation: fadeUp 0.15s ease; }
+    .url-modal-box {
+      background: var(--bg-card);
+      border: 1px solid rgba(200,245,0,0.3);
+      border-radius: 16px;
+      padding: 24px;
+      width: 420px; max-width: 95vw;
     }
-    .week-banner input:focus { border-bottom-color: #e63946; }
-    .week-banner input[readonly] { cursor: default; pointer-events: none; }
+    .url-modal-box h4 {
+      font-size: 0.8rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--lime); margin-bottom: 16px;
+    }
+    .url-modal-box label {
+      display: block; font-size: 0.72rem;
+      color: var(--text-sec); margin-bottom: 5px; margin-top: 12px;
+    }
+    .url-modal-box input[type="text"] {
+      width: 100%;
+      background: var(--bg-inner);
+      border: 1px solid #333;
+      border-radius: 8px;
+      color: #f0f0f0;
+      font-family: inherit;
+      font-size: 0.9rem;
+      padding: 9px 12px;
+      outline: none;
+    }
+    .url-modal-box input[type="text"]:focus { border-color: var(--lime); }
+    .url-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+    .url-insert-btn {
+      padding: 9px 20px;
+      background: var(--lime); color: #111; border: none;
+      border-radius: 8px; font-family: inherit; font-weight: 800;
+      font-size: 0.8rem; text-transform: uppercase; cursor: pointer;
+    }
+    .url-insert-btn:hover { opacity: 0.9; }
+    .url-cancel-btn {
+      padding: 9px 20px;
+      background: var(--bg-inner); color: #888; border: none;
+      border-radius: 8px; font-family: inherit; font-weight: 700;
+      font-size: 0.8rem; text-transform: uppercase; cursor: pointer;
+    }
+    .url-cancel-btn:hover { background: #333; }
 
     /* ── Modal contraseña ── */
     .modal-overlay {
@@ -393,33 +508,42 @@
       background: rgba(0,0,0,0.8); z-index: 1000;
       align-items: center; justify-content: center;
     }
-    .modal-overlay.visible { display: flex; animation: fadeIn 0.2s ease; }
+    .modal-overlay.visible { display: flex; animation: fadeUp 0.2s ease; }
     .modal-box {
-      background: #1a1a1a; border: 1px solid #333;
-      border-top: 3px solid #e63946; border-radius: 12px;
+      background: var(--bg-card);
+      border: 1px solid rgba(200,245,0,0.25);
+      border-radius: 16px;
       padding: 32px; width: 340px; text-align: center;
     }
-    .modal-box .lock-icon { font-size: 2.5rem; margin-bottom: 12px; }
-    .modal-box h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
-    .modal-box p { font-size: 0.8rem; color: #666; margin-bottom: 20px; }
+    .modal-box .lock-icon { font-size: 2.2rem; margin-bottom: 12px; }
+    .modal-box h2 {
+      font-size: 0.9rem; font-weight: 800;
+      text-transform: uppercase; letter-spacing: 2px;
+      color: var(--lime); margin-bottom: 6px;
+    }
+    .modal-box p { font-size: 0.78rem; color: #555; margin-bottom: 20px; }
     .modal-box input[type="password"] {
-      width: 100%; background: #111; border: 1px solid #333; border-radius: 6px;
-      color: #f0f0f0; font-size: 1rem; padding: 10px 14px; outline: none;
-      margin-bottom: 12px; letter-spacing: 3px;
+      width: 100%; background: var(--bg-inner);
+      border: 1px solid #333; border-radius: 8px;
+      color: #f0f0f0; font-size: 1rem; padding: 10px 14px;
+      outline: none; margin-bottom: 12px; letter-spacing: 3px;
+      font-family: inherit;
     }
-    .modal-box input[type="password"]:focus { border-color: #e63946; }
-    .error-msg { color: #e63946; font-size: 0.8rem; margin-bottom: 10px; min-height: 18px; }
-    .modal-actions { display: flex; gap: 10px; }
+    .modal-box input[type="password"]:focus { border-color: var(--lime); }
+    .error-msg { color: #ef4444; font-size: 0.78rem; margin-bottom: 10px; min-height: 18px; }
+    .modal-actions { display: flex; gap: 8px; }
     .btn-confirm {
-      flex: 1; padding: 10px; background: #e63946; color: #fff; border: none;
-      border-radius: 6px; font-weight: 700; font-size: 0.85rem;
-      text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+      flex: 1; padding: 10px;
+      background: var(--lime); color: #111; border: none;
+      border-radius: 8px; font-family: inherit; font-weight: 800;
+      font-size: 0.82rem; text-transform: uppercase; cursor: pointer;
     }
-    .btn-confirm:hover { background: #c1121f; }
+    .btn-confirm:hover { opacity: 0.9; }
     .btn-cancel {
-      flex: 1; padding: 10px; background: #2a2a2a; color: #aaa; border: none;
-      border-radius: 6px; font-weight: 700; font-size: 0.85rem;
-      text-transform: uppercase; letter-spacing: 1px; cursor: pointer;
+      flex: 1; padding: 10px;
+      background: var(--bg-inner); color: #777; border: none;
+      border-radius: 8px; font-family: inherit; font-weight: 700;
+      font-size: 0.82rem; text-transform: uppercase; cursor: pointer;
     }
     .btn-cancel:hover { background: #333; }
   </style>
@@ -442,11 +566,11 @@
   </div>
 </div>
 
-<!-- Mini-modal insertar link de video -->
+<!-- Mini-modal insertar video -->
 <div class="url-modal" id="url-modal">
   <div class="url-modal-box">
-    <h4>🎬 Insertar link de video</h4>
-    <label>Nombre del ejercicio (opcional — se insertará donde está el cursor)</label>
+    <h4>🎬 Insertar "ver video"</h4>
+    <label>Nombre del ejercicio</label>
     <input type="text" id="url-exercise" placeholder="Ej: Thruster" />
     <label>URL del video (YouTube u otro)</label>
     <input type="text" id="url-link" placeholder="https://www.youtube.com/watch?v=..." />
@@ -457,33 +581,31 @@
   </div>
 </div>
 
-<header>
-  <div class="header-top">
-    <div>
-      <h1>Cross<span>Fit</span> &mdash; Planificación Randy</h1>
-      <p>Semana de entrenamiento personalizada</p>
+<!-- Topbar -->
+<div class="topbar">
+  <div class="topbar-left">
+    <div class="topbar-title">CrossFit <span>·</span> Planificación Randy</div>
+    <div class="topbar-week">
+      <input type="text" id="semana-input" placeholder="SEMANA — selecciona fechas" readonly />
     </div>
-    <button class="unlock-badge" id="unlock-badge" onclick="lockSession()">
-      🔓 Desbloqueado — bloquear
-    </button>
   </div>
-  <nav class="days-nav">
-    <button class="day-btn active" onclick="showDay('lunes',this)">Lunes</button>
-    <button class="day-btn" onclick="showDay('martes',this)">Martes</button>
-    <button class="day-btn" onclick="showDay('miercoles',this)">Miércoles</button>
-    <button class="day-btn" onclick="showDay('jueves',this)">Jueves</button>
-    <button class="day-btn" onclick="showDay('viernes',this)">Viernes</button>
-    <button class="day-btn" onclick="showDay('sabado',this)">Sábado</button>
-    <button class="day-btn" onclick="showDay('domingo',this)">Domingo <span class="rest-badge">REST</span></button>
-  </nav>
-</header>
+  <button class="unlock-badge" id="unlock-badge" onclick="lockSession()">
+    🔓 Desbloqueado
+  </button>
+</div>
+
+<!-- Días nav -->
+<nav class="days-nav">
+  <button class="day-btn active" onclick="showDay('lunes',this)">Lunes</button>
+  <button class="day-btn" onclick="showDay('martes',this)">Martes</button>
+  <button class="day-btn" onclick="showDay('miercoles',this)">Miércoles</button>
+  <button class="day-btn" onclick="showDay('jueves',this)">Jueves</button>
+  <button class="day-btn" onclick="showDay('viernes',this)">Viernes</button>
+  <button class="day-btn" onclick="showDay('sabado',this)">Sábado</button>
+  <button class="day-btn" onclick="showDay('domingo',this)">Domingo <span class="rest-badge">REST</span></button>
+</nav>
 
 <main>
-  <div class="week-banner">
-    <span class="week-label">Semana</span>
-    <input type="text" id="semana-input" placeholder="Ej: 26 May – 1 Jun 2025" readonly />
-  </div>
-
   <div id="panel-lunes"     class="day-panel active" data-day="lunes"></div>
   <div id="panel-martes"    class="day-panel"        data-day="martes"></div>
   <div id="panel-miercoles" class="day-panel"        data-day="miercoles"></div>
@@ -494,70 +616,80 @@
   <!-- DOMINGO -->
   <div id="panel-domingo" class="day-panel">
     <div class="day-header">
-      <div class="day-title">Domingo <span>/ Descanso</span></div>
+      <div class="day-meta">
+        <div class="day-label">Domingo <span>/ REST</span></div>
+        <div class="day-sublabel">Recuperación activa</div>
+      </div>
     </div>
-    <div class="rest-day">
-      <div class="icon">🛌</div>
-      <h2>Día de descanso</h2>
-      <p>Recuperación activa, movilidad suave o completo reposo.</p>
+    <div class="rest-screen">
+      <div class="rest-icon-wrap">🛌</div>
+      <div class="rest-title">Día de descanso</div>
+      <div class="rest-sub">Movilidad suave, foam roller o reposo completo</div>
     </div>
-    <div class="section-card sec-accesorios" style="margin-top:16px">
-      <div class="sec-header"><h3>Notas de recuperación</h3></div>
-      <div class="content-text" id="domingo-notas"></div>
-      <textarea id="domingo-notas-edit"></textarea>
+    <div class="section-card">
+      <div class="card-header">
+        <div class="card-badge badge-purple">📋</div>
+        <div class="card-title">Notas de recuperación</div>
+      </div>
+      <div class="card-body">
+        <div class="content-text" id="domingo-notas"></div>
+        <textarea id="domingo-notas-edit"></textarea>
+      </div>
     </div>
     <div style="display:flex;justify-content:flex-end;margin-top:12px">
-      <button class="edit-btn" id="domingo-edit-btn" onclick="toggleDomingo()">Editar notas</button>
+      <button class="edit-btn" id="domingo-edit-btn" onclick="toggleDomingo()">✏️ Editar notas</button>
     </div>
   </div>
 </main>
 
 <script>
-// ─── Datos ────────────────────────────────────────────────────────────────────
+// ─── Config ──────────────────────────────────────────────────────────────────
 const DAYS_TRAINING = ['lunes','martes','miercoles','jueves','viernes','sabado'];
-const DAYS_ALL      = [...DAYS_TRAINING, 'domingo'];
+const DAYS_ALL      = [...DAYS_TRAINING,'domingo'];
 const MAIN_SECS     = ['calentamiento','levantamiento','workout1','workout2','accesorios'];
 const NOTE_KEYS     = ['nota1','nota2','nota3','nota4'];
 
 const DAY_LABELS = {
-  lunes:'Lunes / Día 1', martes:'Martes / Día 2', miercoles:'Miércoles / Día 3',
-  jueves:'Jueves / Día 4', viernes:'Viernes / Día 5', sabado:'Sábado / Día 6',
+  lunes:'Lunes/Día 1', martes:'Martes/Día 2', miercoles:'Miércoles/Día 3',
+  jueves:'Jueves/Día 4', viernes:'Viernes/Día 5', sabado:'Sábado/Día 6',
+};
+
+const SEC_CONFIG = {
+  calentamiento: { badge:'badge-lime', icon:'🔥', label:'Calentamiento',   ph:'Describe el calentamiento...' },
+  levantamiento: { badge:'badge-blue', icon:'🏋️', label:'Levantamiento',   ph:'Series, repeticiones, % de 1RM...' },
+  workout1:      { badge:'badge-red',  icon:'⚡', label:'Workout 1',       ph:'AMRAP, Para tiempo, EMOM...' },
+  workout2:      { badge:'badge-red',  icon:'⚡', label:'Workout 2',       ph:'Segundo workout del día...' },
+  accesorios:    { badge:'badge-purple',icon:'💪',label:'Accesorios',      ph:'Ejercicios accesorios, core, movilidad...' },
 };
 
 const DEFAULTS = {
-  calentamiento:
-`3 rondas:
+  calentamiento:`3 rondas:
 - 400m trote suave
 - 10 hip circles cada lado
 - 10 dislocaciones con palo
 - 15 hollow rocks`,
-  levantamiento:
-`Back Squat – 5 × 5
+  levantamiento:`Back Squat – 5 × 5
 Empezar al 70% 1RM.
 Aumentar carga si la técnica es sólida.`,
-  workout1:
-`AMRAP 20 min:
+  workout1:`AMRAP 20 min:
 - 5 Pull-ups
 - 10 Push-ups
 - 15 Air Squats`,
-  workout2: '',
-  accesorios:
-`- 3 × 15 GHD Sit-ups
+  workout2:'',
+  accesorios:`- 3 × 15 GHD Sit-ups
 - 3 × 12 Single-leg RDL cada lado
 - 2 min plank hold`,
   nota1:'', nota2:'', nota3:'', nota4:'',
 };
 
-const DOMINGO_DEFAULT =
-`- Foam roller cuerpo completo 10 min
+const DOMINGO_DEFAULT =`- Foam roller cuerpo completo 10 min
 - Yoga o stretching 20-30 min
 - Hidratación mínima 2.5 L
 - Dormir 8 horas`;
 
 // ─── Contraseña ───────────────────────────────────────────────────────────────
 // Contraseña por defecto: crossfit2025
-// Para cambiarla estando desbloqueado abre la consola y escribe:
-//   cambiarContrasena('nueva_clave')
+// Para cambiarla: cambiarContrasena('nueva_clave')
 let sessionUnlocked = false;
 let pendingCb = null;
 
@@ -615,80 +747,135 @@ document.getElementById('pwd-modal').addEventListener('click', e => {
 
 // ─── Navegación ───────────────────────────────────────────────────────────────
 function showDay(day, btn) {
-  DAYS_ALL.forEach(d => document.getElementById('panel-' + d).classList.remove('active'));
+  DAYS_ALL.forEach(d => document.getElementById('panel-'+d).classList.remove('active'));
   document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('panel-' + day).classList.add('active');
+  document.getElementById('panel-'+day).classList.add('active');
   btn.classList.add('active');
 }
 
-// ─── Render de contenido con links inline ─────────────────────────────────────
-// Formato: "Nombre del ejercicio [https://...]"
-// En display se convierte en: "Nombre del ejercicio ▶ ver video"
-const URL_PATTERN = /\[(https?:\/\/[^\]]+)\]/g;
+// ─── Render de contenido ──────────────────────────────────────────────────────
+const PLAY_SVG = `<svg width="7" height="8" viewBox="0 0 7 8" fill="currentColor"><path d="M0 0L7 4 0 8z"/></svg>`;
 
-const PLAY_ICON = `<svg width="8" height="9" viewBox="0 0 8 9" fill="currentColor"><path d="M0 0 L8 4.5 L0 9 Z"/></svg>`;
-
-function renderContent(rawText) {
-  // Escapar HTML primero
-  const escaped = rawText
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;');
-
-  // Convertir [URL] → botón "ver video"
-  const withLinks = escaped.replace(
-    /\[(https?:\/\/[^\]]+)\]/g,
-    (_, url) => `<a class="vid-link" href="${url}" target="_blank" rel="noopener noreferrer">${PLAY_ICON} ver video</a>`
-  );
-
+function renderContent(raw) {
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  // Escapar primero, luego procesar links [URL]
+  let html = esc(raw);
+  // Links inline: texto antes de [URL] o solo [URL]
+  html = html.replace(/\[(https?:\/\/[^\]]+)\]/g,
+    (_,url) => `<a class="vid-link" href="${url}" target="_blank" rel="noopener noreferrer">${PLAY_SVG} ver video</a>`);
   // Saltos de línea
-  return withLinks.replace(/\n/g, '<br>');
+  html = html.replace(/\n/g,'<br>');
+  return html;
 }
 
-function getRawText(day, key) {
-  const saved = localStorage.getItem('cf_' + day + '_' + key);
-  return saved !== null ? saved : (DEFAULTS[key] ?? '');
+function getRaw(day, key) {
+  const s = localStorage.getItem('cf_'+day+'_'+key);
+  return s !== null ? s : (DEFAULTS[key] ?? '');
+}
+
+// ─── Videos (miniaturas en card) ──────────────────────────────────────────────
+function getYTId(url) {
+  try {
+    const u = new URL(url);
+    if (u.hostname.includes('youtu.be')) return u.pathname.slice(1).split('?')[0];
+    return u.searchParams.get('v');
+  } catch { return null; }
+}
+
+function extractVideos(raw) {
+  const results = [];
+  const rx = /([^\[\n]*)\[(https?:\/\/[^\]]+)\]/g;
+  let m;
+  while ((m = rx.exec(raw)) !== null) {
+    results.push({ label: m[1].replace(/^[-\s*]+/, '').trim() || 'Ver video', url: m[2] });
+  }
+  return results;
+}
+
+function renderVideoThumbs(day, key, videos) {
+  const container = document.getElementById(day+'-'+key+'-thumbs');
+  if (!container) return;
+  if (!videos.length) { container.style.display='none'; return; }
+  container.style.display = '';
+  container.innerHTML = '';
+  videos.forEach(v => {
+    const ytId = getYTId(v.url);
+    const a = document.createElement('a');
+    a.href = v.url; a.target='_blank'; a.rel='noopener noreferrer';
+    a.className = 'video-thumb-item';
+    if (ytId) {
+      const img = document.createElement('img');
+      img.src = `https://img.youtube.com/vi/${ytId}/mqdefault.jpg`;
+      img.alt = v.label;
+      img.onerror = function() {
+        const ph = document.createElement('div');
+        ph.className='video-thumb-placeholder-img'; ph.textContent='▶';
+        this.replaceWith(ph);
+      };
+      a.appendChild(img);
+    } else {
+      const ph = document.createElement('div');
+      ph.className='video-thumb-placeholder-img'; ph.textContent='🔗';
+      a.appendChild(ph);
+    }
+    const overlay = document.createElement('div');
+    overlay.className='video-play-overlay';
+    overlay.innerHTML=`<div class="play-circle">${PLAY_SVG}</div>`;
+    a.appendChild(overlay);
+    const name = document.createElement('div');
+    name.className='video-name';
+    name.textContent = v.label;
+    a.appendChild(name);
+    container.appendChild(a);
+  });
 }
 
 // ─── Construcción del panel ───────────────────────────────────────────────────
-function secCard(day, key, cssClass, icon, label, placeholder) {
+function secHTML(day, key) {
+  const c = SEC_CONFIG[key];
   return `
-    <div class="section-card ${cssClass}">
-      <div class="sec-header"><h3>${icon} ${label}</h3></div>
-      <div class="content-text" id="${day}-${key}"></div>
-      <textarea id="${day}-${key}-edit" placeholder="${placeholder}"></textarea>
-      <button class="insert-vid-btn" id="${day}-${key}-vidbtn"
-              onclick="openUrlModal('${day}-${key}-edit')">
-        🎬 Insertar "ver video"
-      </button>
+    <div class="section-card">
+      <div class="card-header">
+        <div class="card-badge ${c.badge}">${c.icon}</div>
+        <div class="card-title">${c.label}</div>
+      </div>
+      <div class="card-body">
+        <div class="content-text" id="${day}-${key}"></div>
+        <textarea id="${day}-${key}-edit" placeholder="${c.ph}"></textarea>
+        <button class="insert-vid-btn" id="${day}-${key}-vidbtn"
+                onclick="openUrlModal('${day}-${key}-edit')">
+          🎬 Insertar "ver video"
+        </button>
+      </div>
+      <div class="video-thumbs" id="${day}-${key}-thumbs" style="display:none"></div>
     </div>`;
 }
 
 function buildDayPanel(day) {
-  const panel = document.getElementById('panel-' + day);
-  const [title, sub] = DAY_LABELS[day].split(' / ');
+  const panel = document.getElementById('panel-'+day);
+  const [name, sub] = DAY_LABELS[day].split('/');
   panel.innerHTML = `
     <div class="day-header">
-      <div class="day-title">${title} <span>/ ${sub}</span></div>
-      <button class="edit-btn" id="${day}-edit-btn" onclick="toggleEdit('${day}')">Editar</button>
+      <div class="day-meta">
+        <div class="day-label">${name} <span>/ ${sub}</span></div>
+        <div class="day-sublabel">${sub}</div>
+      </div>
+      <button class="edit-btn" id="${day}-edit-btn" onclick="toggleEdit('${day}')">✏️ Editar</button>
     </div>
 
-    ${secCard(day,'calentamiento','sec-calentamiento','🔥','Calentamiento','Describe el calentamiento...')}
-
+    ${secHTML(day,'calentamiento')}
     <div class="note-bridge">
       <div class="note-text" id="${day}-nota1"></div>
       <textarea id="${day}-nota1-edit" placeholder="Nota para el atleta..."></textarea>
     </div>
 
-    ${secCard(day,'levantamiento','sec-levantamiento','🏋️','Levantamiento','Series, repeticiones, % de 1RM...')}
-
+    ${secHTML(day,'levantamiento')}
     <div class="note-bridge">
       <div class="note-text" id="${day}-nota2"></div>
       <textarea id="${day}-nota2-edit" placeholder="Nota para el atleta..."></textarea>
     </div>
 
-    ${secCard(day,'workout1','sec-workout','⚡','Workout 1','AMRAP, Para tiempo, EMOM...')}
-
+    ${secHTML(day,'workout1')}
     <div class="note-bridge">
       <div class="note-text" id="${day}-nota3"></div>
       <textarea id="${day}-nota3-edit" placeholder="Nota para el atleta..."></textarea>
@@ -697,118 +884,108 @@ function buildDayPanel(day) {
     <div class="w2-toggle-row">
       <button class="w2-toggle-btn" id="${day}-w2-btn" onclick="toggleW2('${day}')">＋ Agregar Workout 2</button>
     </div>
-
     <div class="w2-block" id="${day}-w2-block">
-      ${secCard(day,'workout2','sec-workout','⚡','Workout 2','Segundo workout del día...')}
+      ${secHTML(day,'workout2')}
       <div class="note-bridge">
         <div class="note-text" id="${day}-nota4"></div>
         <textarea id="${day}-nota4-edit" placeholder="Nota para el atleta..."></textarea>
       </div>
     </div>
 
-    ${secCard(day,'accesorios','sec-accesorios','💪','Accesorios','Ejercicios accesorios, core, movilidad...')}
+    ${secHTML(day,'accesorios')}
   `;
 }
 
-// ─── Estado de edición ────────────────────────────────────────────────────────
+// ─── Edición ──────────────────────────────────────────────────────────────────
 let editingState = {};
 
 function toggleEdit(day) {
-  requireAuth(() => {
-    if (!editingState[day]) doOpen(day);
-    else doSave(day);
-  });
+  requireAuth(() => { editingState[day] ? doSave(day) : doOpen(day); });
 }
 
 function doOpen(day) {
   MAIN_SECS.forEach(k => {
-    const display = document.getElementById(day + '-' + k);
-    const ta      = document.getElementById(day + '-' + k + '-edit');
-    const vidbtn  = document.getElementById(day + '-' + k + '-vidbtn');
+    const display = document.getElementById(day+'-'+k);
+    const ta      = document.getElementById(day+'-'+k+'-edit');
+    const vidbtn  = document.getElementById(day+'-'+k+'-vidbtn');
+    const thumbs  = document.getElementById(day+'-'+k+'-thumbs');
     if (!display || !ta) return;
-    ta.value = getRawText(day, k);
+    ta.value = getRaw(day, k);
     display.style.display = 'none';
     ta.style.display = 'block';
     if (vidbtn) vidbtn.classList.add('visible');
+    if (thumbs) thumbs.style.display = 'none';
   });
   NOTE_KEYS.forEach(k => {
-    const display = document.getElementById(day + '-' + k);
-    const ta      = document.getElementById(day + '-' + k + '-edit');
-    if (!display || !ta) return;
-    ta.value = getRawText(day, k);
-    display.style.display = 'none';
-    ta.style.display = 'block';
+    const d = document.getElementById(day+'-'+k);
+    const t = document.getElementById(day+'-'+k+'-edit');
+    if (!d||!t) return;
+    t.value = getRaw(day, k);
+    d.style.display = 'none'; t.style.display = 'block';
   });
   document.getElementById('semana-input').removeAttribute('readonly');
-  const btn = document.getElementById(day + '-edit-btn');
-  if (btn) { btn.textContent = 'Guardar'; btn.className = 'save-btn'; }
+  const btn = document.getElementById(day+'-edit-btn');
+  if (btn) { btn.textContent = '✔ Guardar'; btn.className = 'save-btn'; }
   editingState[day] = true;
 }
 
 function doSave(day) {
   MAIN_SECS.forEach(k => {
-    const display = document.getElementById(day + '-' + k);
-    const ta      = document.getElementById(day + '-' + k + '-edit');
-    const vidbtn  = document.getElementById(day + '-' + k + '-vidbtn');
-    if (!display || !ta) return;
+    const display = document.getElementById(day+'-'+k);
+    const ta      = document.getElementById(day+'-'+k+'-edit');
+    const vidbtn  = document.getElementById(day+'-'+k+'-vidbtn');
+    if (!display||!ta) return;
     const raw = ta.value;
     display.innerHTML = renderContent(raw);
     ta.style.display = 'none';
     display.style.display = '';
     if (vidbtn) vidbtn.classList.remove('visible');
-    try { localStorage.setItem('cf_' + day + '_' + k, raw); } catch(e) {}
+    renderVideoThumbs(day, k, extractVideos(raw));
+    try { localStorage.setItem('cf_'+day+'_'+k, raw); } catch(e) {}
   });
   NOTE_KEYS.forEach(k => {
-    const display = document.getElementById(day + '-' + k);
-    const ta      = document.getElementById(day + '-' + k + '-edit');
-    if (!display || !ta) return;
-    display.textContent = ta.value;
-    ta.style.display = 'none';
-    display.style.display = '';
-    try { localStorage.setItem('cf_' + day + '_' + k, ta.value); } catch(e) {}
+    const d = document.getElementById(day+'-'+k);
+    const t = document.getElementById(day+'-'+k+'-edit');
+    if (!d||!t) return;
+    d.textContent = t.value; t.style.display='none'; d.style.display='';
+    try { localStorage.setItem('cf_'+day+'_'+k, t.value); } catch(e) {}
   });
-
   document.getElementById('semana-input').setAttribute('readonly', true);
   try { localStorage.setItem('cf_semana', document.getElementById('semana-input').value); } catch(e) {}
-
-  const btn = document.getElementById(day + '-edit-btn');
-  if (btn) { btn.textContent = 'Editar'; btn.className = 'edit-btn'; }
+  const btn = document.getElementById(day+'-edit-btn');
+  if (btn) { btn.textContent = '✏️ Editar'; btn.className = 'edit-btn'; }
   editingState[day] = false;
 }
 
 // ─── Workout 2 ────────────────────────────────────────────────────────────────
 function toggleW2(day) {
   requireAuth(() => {
-    const block   = document.getElementById(day + '-w2-block');
-    const btn     = document.getElementById(day + '-w2-btn');
-    const visible = block.classList.toggle('visible');
-    btn.classList.toggle('active', visible);
-    btn.textContent = visible ? '✕ Quitar Workout 2' : '＋ Agregar Workout 2';
-    try { localStorage.setItem('cf_' + day + '_w2visible', visible ? '1' : '0'); } catch(e) {}
+    const block = document.getElementById(day+'-w2-block');
+    const btn   = document.getElementById(day+'-w2-btn');
+    const vis   = block.classList.toggle('visible');
+    btn.classList.toggle('active', vis);
+    btn.textContent = vis ? '✕ Quitar Workout 2' : '＋ Agregar Workout 2';
+    try { localStorage.setItem('cf_'+day+'_w2visible', vis?'1':'0'); } catch(e) {}
   });
 }
 
 // ─── Domingo ──────────────────────────────────────────────────────────────────
 let editingDomingo = false;
-
 function toggleDomingo() {
   requireAuth(() => {
-    const display = document.getElementById('domingo-notas');
-    const ta      = document.getElementById('domingo-notas-edit');
-    const btn     = document.getElementById('domingo-edit-btn');
+    const d = document.getElementById('domingo-notas');
+    const t = document.getElementById('domingo-notas-edit');
+    const b = document.getElementById('domingo-edit-btn');
     if (!editingDomingo) {
-      ta.value = display.textContent || DOMINGO_DEFAULT;
-      display.style.display = 'none';
-      ta.style.display = 'block';
-      btn.textContent = 'Guardar'; btn.className = 'save-btn';
-      editingDomingo = true;
+      t.value = d.textContent || DOMINGO_DEFAULT;
+      d.style.display='none'; t.style.display='block';
+      b.textContent='✔ Guardar'; b.className='save-btn';
+      editingDomingo=true;
     } else {
-      display.textContent = ta.value;
-      ta.style.display = 'none';
-      display.style.display = '';
-      btn.textContent = 'Editar notas'; btn.className = 'edit-btn';
-      try { localStorage.setItem('cf_domingo_notas', ta.value); } catch(e) {}
-      editingDomingo = false;
+      d.textContent=t.value; t.style.display='none'; d.style.display='';
+      b.textContent='✏️ Editar notas'; b.className='edit-btn';
+      try { localStorage.setItem('cf_domingo_notas', t.value); } catch(e) {}
+      editingDomingo=false;
     }
   });
 }
@@ -819,87 +996,73 @@ document.getElementById('semana-input').addEventListener('click', function() {
     requireAuth(() => { this.removeAttribute('readonly'); this.focus(); });
 });
 
-// ─── Carga inicial ────────────────────────────────────────────────────────────
-function loadDay(day) {
-  MAIN_SECS.forEach(k => {
-    const el = document.getElementById(day + '-' + k);
-    if (el) el.innerHTML = renderContent(getRawText(day, k));
-  });
-  NOTE_KEYS.forEach(k => {
-    const el = document.getElementById(day + '-' + k);
-    if (el) el.textContent = getRawText(day, k);
-  });
-  // Workout 2 visibilidad guardada
-  if (localStorage.getItem('cf_' + day + '_w2visible') === '1') {
-    const block = document.getElementById(day + '-w2-block');
-    const btn   = document.getElementById(day + '-w2-btn');
-    if (block) { block.classList.add('visible'); btn.classList.add('active'); btn.textContent = '✕ Quitar Workout 2'; }
-  }
-}
-
-// ─── URL modal (insertar ver video) ──────────────────────────────────────────
-let activeTextareaId = null;
-
+// ─── URL modal ────────────────────────────────────────────────────────────────
+let activeTA = null;
 function openUrlModal(taId) {
-  activeTextareaId = taId;
+  activeTA = taId;
   document.getElementById('url-exercise').value = '';
   document.getElementById('url-link').value = '';
   document.getElementById('url-modal').classList.add('visible');
   setTimeout(() => document.getElementById('url-exercise').focus(), 80);
 }
-
 function closeUrlModal() {
   document.getElementById('url-modal').classList.remove('visible');
-  activeTextareaId = null;
+  activeTA = null;
 }
-
 function doInsertVideo() {
   const exercise = document.getElementById('url-exercise').value.trim();
   const url      = document.getElementById('url-link').value.trim();
   if (!url) { document.getElementById('url-link').focus(); return; }
-
-  const ta = document.getElementById(activeTextareaId);
+  const ta = document.getElementById(activeTA);
   if (!ta) { closeUrlModal(); return; }
-
   const insert = exercise ? `${exercise} [${url}]` : `[${url}]`;
-  const start  = ta.selectionStart;
-  const end    = ta.selectionEnd;
-  // Si hay texto seleccionado, envuelve la selección con el link
+  const start=ta.selectionStart, end=ta.selectionEnd;
   if (start !== end) {
-    const selected = ta.value.substring(start, end);
-    const replacement = `${selected} [${url}]`;
-    ta.value = ta.value.substring(0, start) + replacement + ta.value.substring(end);
-    ta.selectionStart = ta.selectionEnd = start + replacement.length;
+    const sel = ta.value.substring(start,end);
+    const rep = `${sel} [${url}]`;
+    ta.value = ta.value.substring(0,start)+rep+ta.value.substring(end);
+    ta.selectionStart = ta.selectionEnd = start+rep.length;
   } else {
-    // Insertar en la posición del cursor, en nueva línea si no está al inicio
-    const before = ta.value.substring(0, start);
-    const after  = ta.value.substring(start);
-    const prefix = (before.length > 0 && !before.endsWith('\n')) ? '\n' : '';
-    const suffix = (after.length > 0 && !after.startsWith('\n')) ? '\n' : '';
-    const full   = before + prefix + insert + suffix + after;
-    ta.value = full;
-    const pos = before.length + prefix.length + insert.length;
-    ta.selectionStart = ta.selectionEnd = pos;
+    const before=ta.value.substring(0,start), after=ta.value.substring(start);
+    const pre=(before.length>0&&!before.endsWith('\n'))?'\n':'';
+    const suf=(after.length>0&&!after.startsWith('\n'))?'\n':'';
+    ta.value=before+pre+insert+suf+after;
+    ta.selectionStart=ta.selectionEnd=before.length+pre.length+insert.length;
   }
   ta.focus();
   closeUrlModal();
 }
-
 document.getElementById('url-modal').addEventListener('click', e => {
-  if (e.target.id === 'url-modal') closeUrlModal();
+  if (e.target.id==='url-modal') closeUrlModal();
 });
 document.getElementById('url-link').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doInsertVideo();
+  if (e.key==='Enter') doInsertVideo();
 });
+
+// ─── Carga inicial ────────────────────────────────────────────────────────────
+function loadDay(day) {
+  MAIN_SECS.forEach(k => {
+    const el = document.getElementById(day+'-'+k);
+    if (!el) return;
+    const raw = getRaw(day, k);
+    el.innerHTML = renderContent(raw);
+    renderVideoThumbs(day, k, extractVideos(raw));
+  });
+  NOTE_KEYS.forEach(k => {
+    const el = document.getElementById(day+'-'+k);
+    if (el) el.textContent = getRaw(day, k);
+  });
+  if (localStorage.getItem('cf_'+day+'_w2visible')==='1') {
+    const block=document.getElementById(day+'-w2-block');
+    const btn=document.getElementById(day+'-w2-btn');
+    if (block) { block.classList.add('visible'); btn.classList.add('active'); btn.textContent='✕ Quitar Workout 2'; }
+  }
+}
 
 function init() {
   DAYS_TRAINING.forEach(day => { buildDayPanel(day); loadDay(day); });
-
-  // Domingo
   const domSaved = localStorage.getItem('cf_domingo_notas');
   document.getElementById('domingo-notas').textContent = domSaved !== null ? domSaved : DOMINGO_DEFAULT;
-
-  // Semana
   const sem = localStorage.getItem('cf_semana');
   if (sem) document.getElementById('semana-input').value = sem;
 }
