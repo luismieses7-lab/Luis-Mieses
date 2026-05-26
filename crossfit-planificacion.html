@@ -7,18 +7,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --bg:        #141414;
-      --bg-card:   #1e1e1e;
-      --bg-inner:  #252525;
-      --bg-row:    #2a2a2a;
-      --lime:      #c8f500;
-      --lime-dim:  rgba(200,245,0,0.15);
-      --lime-glow: rgba(200,245,0,0.25);
-      --green:     #4ade80;
-      --text:      #ffffff;
-      --text-sec:  #888888;
-      --text-dim:  #555555;
-      --border:    rgba(255,255,255,0.06);
+      --bg:        #f5f6f1;
+      --bg-card:   #ffffff;
+      --bg-inner:  #f0f2eb;
+      --bg-row:    #e8ebe1;
+      --lime:      #8fb800;
+      --lime-dim:  rgba(143,184,0,0.12);
+      --lime-glow: rgba(143,184,0,0.3);
+      --lime-btn:  #c8f500;
+      --green:     #2d8a4e;
+      --text:      #111111;
+      --text-sec:  #666666;
+      --text-dim:  #999999;
+      --border:    rgba(0,0,0,0.08);
+      --shadow:    0 1px 3px rgba(0,0,0,0.06), 0 4px 12px rgba(0,0,0,0.04);
       --radius:    14px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -34,7 +36,7 @@
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(20,20,20,0.92);
+      background: rgba(245,246,241,0.94);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       padding: 0 24px;
@@ -98,6 +100,7 @@
     .days-nav {
       background: var(--bg-card);
       border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 0 var(--border);
       display: flex;
       overflow-x: auto;
       padding: 0 16px;
@@ -212,6 +215,7 @@
       border-radius: var(--radius);
       overflow: hidden;
       margin-bottom: 8px;
+      box-shadow: var(--shadow);
     }
 
     .card-header {
@@ -248,7 +252,7 @@
     .content-text {
       font-size: 0.92rem;
       line-height: 1.9;
-      color: #ddd;
+      color: #333;
       white-space: pre-wrap;
     }
     .content-text:empty::after { content: '—'; color: var(--text-dim); }
@@ -260,7 +264,7 @@
     .vid-link {
       display: inline-flex; align-items: center; gap: 4px;
       font-size: 0.68rem; font-weight: 700; letter-spacing: 0.5px;
-      color: var(--bg);
+      color: #fff;
       background: var(--lime);
       border-radius: 10px;
       padding: 2px 8px;
@@ -269,16 +273,16 @@
       margin-left: 6px;
       transition: opacity 0.15s;
     }
-    .vid-link:hover { opacity: 0.85; }
+    .vid-link:hover { opacity: 0.82; }
 
     /* textarea edición */
     .section-card textarea {
       display: none;
       width: 100%;
       background: var(--bg-inner);
-      border: 1px solid rgba(200,245,0,0.2);
+      border: 1px solid rgba(143,184,0,0.25);
       border-radius: 8px;
-      color: #f0f0f0;
+      color: #111;
       font-family: inherit;
       font-size: 0.92rem;
       line-height: 1.8;
@@ -335,7 +339,7 @@
     }
     .video-thumb-placeholder-img {
       width: 100%; height: 74px;
-      background: var(--bg-row);
+      background: #dde0d5;
       display: flex; align-items: center; justify-content: center;
       font-size: 1.6rem;
     }
@@ -369,8 +373,8 @@
       position: relative;
       margin: 4px 0;
       padding: 10px 16px 10px 42px;
-      background: rgba(255,214,0,0.03);
-      border: 1px dashed rgba(255,214,0,0.12);
+      background: #fffbea;
+      border: 1px dashed rgba(180,140,0,0.22);
       border-radius: 10px;
       min-height: 36px;
     }
@@ -382,19 +386,19 @@
       font-size: 0.85rem;
     }
     .note-bridge .note-text {
-      color: #c8a800;
+      color: #7a5c00;
       font-size: 0.82rem;
       line-height: 1.6;
       white-space: pre-wrap;
     }
-    .note-bridge .note-text:empty::after { content: 'Sin nota'; color: #2e2700; font-style: italic; }
+    .note-bridge .note-text:empty::after { content: 'Sin nota'; color: #c8b060; font-style: italic; }
     .note-bridge textarea {
       display: none;
       width: 100%;
       background: transparent;
       border: none;
-      border-bottom: 1px dashed rgba(200,160,0,0.3);
-      color: #e6c800;
+      border-bottom: 1px dashed rgba(150,110,0,0.3);
+      color: #5a4000;
       font-family: inherit;
       font-size: 0.82rem;
       line-height: 1.6;
@@ -403,7 +407,7 @@
       min-height: 32px;
       outline: none;
     }
-    .note-bridge textarea:focus { border-bottom-color: rgba(200,160,0,0.6); }
+    .note-bridge textarea:focus { border-bottom-color: rgba(150,110,0,0.6); }
 
     /* ── Workout 2 toggle ── */
     .w2-toggle-row {
@@ -413,9 +417,9 @@
     .w2-toggle-btn {
       padding: 7px 16px;
       background: transparent;
-      border: 1px dashed #333;
+      border: 1px dashed #bbb;
       border-radius: 20px;
-      color: #444;
+      color: #aaa;
       font-family: inherit;
       font-size: 0.72rem;
       font-weight: 700;
@@ -443,27 +447,29 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 2.2rem;
       margin-bottom: 20px;
+      box-shadow: var(--shadow);
     }
     .rest-title {
       font-size: 1.4rem; font-weight: 900;
       text-transform: uppercase; letter-spacing: 3px;
-      color: #333; margin-bottom: 8px;
+      color: #aaa; margin-bottom: 8px;
     }
-    .rest-sub { font-size: 0.85rem; color: #3a3a3a; }
+    .rest-sub { font-size: 0.85rem; color: #bbb; }
 
     /* ── URL mini-modal ── */
     .url-modal {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.75); z-index: 2000;
+      background: rgba(0,0,0,0.45); z-index: 2000;
       align-items: center; justify-content: center;
     }
     .url-modal.visible { display: flex; animation: fadeUp 0.15s ease; }
     .url-modal-box {
       background: var(--bg-card);
-      border: 1px solid rgba(200,245,0,0.3);
+      border: 1px solid var(--border);
       border-radius: 16px;
       padding: 24px;
       width: 420px; max-width: 95vw;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.14);
     }
     .url-modal-box h4 {
       font-size: 0.8rem; font-weight: 800;
@@ -477,9 +483,9 @@
     .url-modal-box input[type="text"] {
       width: 100%;
       background: var(--bg-inner);
-      border: 1px solid #333;
+      border: 1px solid var(--border);
       border-radius: 8px;
-      color: #f0f0f0;
+      color: #111;
       font-family: inherit;
       font-size: 0.9rem;
       padding: 9px 12px;
@@ -493,27 +499,29 @@
       border-radius: 8px; font-family: inherit; font-weight: 800;
       font-size: 0.8rem; text-transform: uppercase; cursor: pointer;
     }
-    .url-insert-btn:hover { opacity: 0.9; }
+    .url-insert-btn:hover { opacity: 0.88; }
     .url-cancel-btn {
       padding: 9px 20px;
-      background: var(--bg-inner); color: #888; border: none;
+      background: var(--bg-inner); color: var(--text-sec); border: 1px solid var(--border);
       border-radius: 8px; font-family: inherit; font-weight: 700;
       font-size: 0.8rem; text-transform: uppercase; cursor: pointer;
     }
-    .url-cancel-btn:hover { background: #333; }
+    .url-cancel-btn:hover { background: var(--bg-row); }
 
     /* ── Modal contraseña ── */
     .modal-overlay {
       display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.8); z-index: 1000;
+      background: rgba(0,0,0,0.45); z-index: 1000;
       align-items: center; justify-content: center;
     }
     .modal-overlay.visible { display: flex; animation: fadeUp 0.2s ease; }
     .modal-box {
       background: var(--bg-card);
-      border: 1px solid rgba(200,245,0,0.25);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--lime);
       border-radius: 16px;
       padding: 32px; width: 340px; text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.14);
     }
     .modal-box .lock-icon { font-size: 2.2rem; margin-bottom: 12px; }
     .modal-box h2 {
@@ -521,16 +529,16 @@
       text-transform: uppercase; letter-spacing: 2px;
       color: var(--lime); margin-bottom: 6px;
     }
-    .modal-box p { font-size: 0.78rem; color: #555; margin-bottom: 20px; }
+    .modal-box p { font-size: 0.78rem; color: var(--text-sec); margin-bottom: 20px; }
     .modal-box input[type="password"] {
       width: 100%; background: var(--bg-inner);
-      border: 1px solid #333; border-radius: 8px;
-      color: #f0f0f0; font-size: 1rem; padding: 10px 14px;
+      border: 1px solid var(--border); border-radius: 8px;
+      color: #111; font-size: 1rem; padding: 10px 14px;
       outline: none; margin-bottom: 12px; letter-spacing: 3px;
       font-family: inherit;
     }
     .modal-box input[type="password"]:focus { border-color: var(--lime); }
-    .error-msg { color: #ef4444; font-size: 0.78rem; margin-bottom: 10px; min-height: 18px; }
+    .error-msg { color: #dc2626; font-size: 0.78rem; margin-bottom: 10px; min-height: 18px; }
     .modal-actions { display: flex; gap: 8px; }
     .btn-confirm {
       flex: 1; padding: 10px;
@@ -538,14 +546,15 @@
       border-radius: 8px; font-family: inherit; font-weight: 800;
       font-size: 0.82rem; text-transform: uppercase; cursor: pointer;
     }
-    .btn-confirm:hover { opacity: 0.9; }
+    .btn-confirm:hover { opacity: 0.88; }
     .btn-cancel {
       flex: 1; padding: 10px;
-      background: var(--bg-inner); color: #777; border: none;
+      background: var(--bg-inner); color: var(--text-sec);
+      border: 1px solid var(--border);
       border-radius: 8px; font-family: inherit; font-weight: 700;
       font-size: 0.82rem; text-transform: uppercase; cursor: pointer;
     }
-    .btn-cancel:hover { background: #333; }
+    .btn-cancel:hover { background: var(--bg-row); }
   </style>
 </head>
 <body>
