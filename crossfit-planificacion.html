@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Planificación CrossFit</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #0d0d0d;
+      color: #f0f0f0;
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1a1a, #2c2c2c);
+      padding: 24px 32px 0;
+      border-bottom: 3px solid #e63946;
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    header h1 span {
+      color: #e63946;
+    }
+
+    header p {
+      color: #888;
+      font-size: 0.85rem;
+      margin-top: 4px;
+      margin-bottom: 20px;
+    }
+
+    .days-nav {
+      display: flex;
+      gap: 4px;
+      overflow-x: auto;
+      padding-bottom: 0;
+    }
+
+    .day-btn {
+      flex-shrink: 0;
+      padding: 12px 24px;
+      background: transparent;
+      color: #aaa;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      bottom: -3px;
+    }
+
+    .day-btn:hover {
+      color: #fff;
+      background: rgba(230, 57, 70, 0.1);
+    }
+
+    .day-btn.active {
+      color: #e63946;
+      border-bottom: 3px solid #e63946;
+      background: rgba(230, 57, 70, 0.08);
+    }
+
+    .day-btn .rest-badge {
+      font-size: 0.6rem;
+      background: #444;
+      color: #aaa;
+      border-radius: 4px;
+      padding: 1px 5px;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .day-btn.active .rest-badge {
+      background: rgba(230, 57, 70, 0.3);
+      color: #e63946;
+    }
+
+    main {
+      padding: 32px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .day-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .day-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .day-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .day-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .day-title span {
+      color: #e63946;
+    }
+
+    .edit-btn {
+      padding: 8px 20px;
+      background: #e63946;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .edit-btn:hover {
+      background: #c1121f;
+    }
+
+    .save-btn {
+      padding: 8px 20px;
+      background: #2d6a4f;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .save-btn:hover {
+      background: #1b4332;
+    }
+
+    .section-card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+
+    .section-card h3 {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #e63946;
+      margin-bottom: 12px;
+    }
+
+    .section-card .content-text {
+      color: #ccc;
+      line-height: 1.8;
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+    }
+
+    .section-card textarea {
+      width: 100%;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 6px;
+      color: #f0f0f0;
+      font-family: inherit;
+      font-size: 0.95rem;
+      line-height: 1.8;
+      padding: 12px;
+      resize: vertical;
+      min-height: 100px;
+      outline: none;
+      display: none;
+    }
+
+    .section-card textarea:focus {
+      border-color: #e63946;
+    }
+
+    .rest-day {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .rest-day .icon {
+      font-size: 4rem;
+      margin-bottom: 16px;
+    }
+
+    .rest-day h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: #555;
+      letter-spacing: 3px;
+    }
+
+    .rest-day p {
+      color: #444;
+      margin-top: 8px;
+      font-size: 0.9rem;
+    }
+
+    .wod-highlight {
+      background: linear-gradient(135deg, #1e0a0a, #2a0d0d);
+      border: 1px solid #4a1010;
+      border-left: 4px solid #e63946;
+    }
+
+    .wod-highlight h3 {
+      font-size: 0.85rem;
+    }
+
+    .week-banner {
+      background: linear-gradient(135deg, #1a1a1a, #111);
+      border: 1px solid #2a2a2a;
+      border-radius: 10px;
+      padding: 16px 24px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .week-banner .week-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #666;
+    }
+
+    .week-banner input {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #333;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 4px 0;
+      outline: none;
+      width: 200px;
+    }
+
+    .week-banner input:focus {
+      border-bottom-color: #e63946;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Cross<span>Fit</span> &mdash; Planificación</h1>
+  <p>Semana de entrenamiento personalizada</p>
+  <nav class="days-nav">
+    <button class="day-btn active" onclick="showDay('lunes', this)">Lunes</button>
+    <button class="day-btn" onclick="showDay('martes', this)">Martes</button>
+    <button class="day-btn" onclick="showDay('miercoles', this)">Miércoles</button>
+    <button class="day-btn" onclick="showDay('jueves', this)">Jueves</button>
+    <button class="day-btn" onclick="showDay('viernes', this)">Viernes</button>
+    <button class="day-btn" onclick="showDay('sabado', this)">Sábado</button>
+    <button class="day-btn" onclick="showDay('domingo', this)">Domingo <span class="rest-badge">REST</span></button>
+  </nav>
+</header>
+
+<main>
+
+  <!-- SEMANA -->
+  <div class="week-banner">
+    <span class="week-label">Semana</span>
+    <input type="text" id="semana-input" placeholder="Ej: 26 May – 1 Jun 2025" />
+  </div>
+
+  <!-- LUNES -->
+  <div id="panel-lunes" class="day-panel active">
+    <div class="day-header">
+      <div class="day-title">Lunes <span>/ Día 1</span></div>
+      <button class="edit-btn" onclick="toggleEdit('lunes')">Editar</button>
+    </div>
+    <div class="section-card">
+      <h3>Calentamiento</h3>
+      <div class="content-text" id="lunes-calentamiento">3 rondas:
+- 400m trote suave
+- 10 inchworms
+- 15 hip circles cada lado
+- 10 dislocaciones con palo</div>
+      <textarea id="lunes-calentamiento-edit"></textarea>
+    </div>
+    <div class="section-card wod-highlight">
+      <h3>⚡ WOD</h3>
+      <div class="content-text" id="lunes-wod">AMRAP 20 min:
+- 5 Pull-ups
+- 10 Push-ups
+- 15 Air Squats
+
+*Rx: kipping pull-ups
+*Scaled: ring rows / knee push-ups</div>
+      <textarea id="lunes-wod-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Fuerza / Skill</h3>
+      <div class="content-text" id="lunes-fuerza">Back Squat – 5 × 5
+Empezar al 70% 1RM, aumentar si la técnica es buena.</div>
+      <textarea id="lunes-fuerza-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Cool Down</h3>
+      <div class="content-text" id="lunes-cooldown">- 2 min pigeon pose cada lado
+- 2 min hamstring stretch
+- Foam roller cuádriceps 1 min</div>
+      <textarea id="lunes-cooldown-edit"></textarea>
+    </div>
+  </div>
+
+  <!-- MARTES -->
+  <div id="panel-martes" class="day-panel">
+    <div class="day-header">
+      <div class="day-title">Martes <span>/ Día 2</span></div>
+      <button class="edit-btn" onclick="toggleEdit('martes')">Editar</button>
+    </div>
+    <div class="section-card">
+      <h3>Calentamiento</h3>
+      <div class="content-text" id="martes-calentamiento">2 rondas:
+- 500m remo o bici
+- 10 shoulder pass-throughs
+- 10 PVC overhead squats
+- 15 hollow rocks</div>
+      <textarea id="martes-calentamiento-edit"></textarea>
+    </div>
+    <div class="section-card wod-highlight">
+      <h3>⚡ WOD</h3>
+      <div class="content-text" id="martes-wod">Para tiempo:
+21-15-9
+- Thrusters (42.5 / 30 kg)
+- Bar Muscle-ups
+
+Cap: 15 min
+*Scaled: push press + jumping pull-ups</div>
+      <textarea id="martes-wod-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Fuerza / Skill</h3>
+      <div class="content-text" id="martes-fuerza">Handstand Push-up Progressions
+4 × AMRAP con 90s de descanso
+- Nivel 1: Pike push-ups
+- Nivel 2: Deficit HSPU con cajas
+- Nivel 3: Strict HSPU</div>
+      <textarea id="martes-fuerza-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Cool Down</h3>
+      <div class="content-text" id="martes-cooldown">- Doorway chest stretch 2 min
+- Child's pose 2 min
+- Wrist mobility 1 min</div>
+      <textarea id="martes-cooldown-edit"></textarea>
+    </div>
+  </div>
+
+  <!-- MIÉRCOLES -->
+  <div id="panel-miercoles" class="day-panel">
+    <div class="day-header">
+      <div class="day-title">Miércoles <span>/ Día 3</span></div>
+      <button class="edit-btn" onclick="toggleEdit('miercoles')">Editar</button>
+    </div>
+    <div class="section-card">
+      <h3>Calentamiento</h3>
+      <div class="content-text" id="miercoles-calentamiento">3 rondas:
+- 10 burpees
+- 10 box step-ups
+- 10 kettlebell swings ligero
+- 200m carrera</div>
+      <textarea id="miercoles-calentamiento-edit"></textarea>
+    </div>
+    <div class="section-card wod-highlight">
+      <h3>⚡ WOD</h3>
+      <div class="content-text" id="miercoles-wod">EMOM 16 min (4 rondas):
+Min 1: 12 KB Swings (32/24 kg)
+Min 2: 10 Box Jumps (60/50 cm)
+Min 3: 8 T2B
+Min 4: Descanso activo (movilidad)</div>
+      <textarea id="miercoles-wod-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Fuerza / Skill</h3>
+      <div class="content-text" id="miercoles-fuerza">Deadlift – 3 × 3 al 80-85% 1RM
+Descanso 3 min entre series.
+Foco: barra cerca del cuerpo, activar lats antes de jalar.</div>
+      <textarea id="miercoles-fuerza-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Cool Down</h3>
+      <div class="content-text" id="miercoles-cooldown">- Hip flexor stretch 2 min cada lado
+- Glute bridge 2 × 15
+- Thoracic foam roller 2 min</div>
+      <textarea id="miercoles-cooldown-edit"></textarea>
+    </div>
+  </div>
+
+  <!-- JUEVES -->
+  <div id="panel-jueves" class="day-panel">
+    <div class="day-header">
+      <div class="day-title">Jueves <span>/ Día 4</span></div>
+      <button class="edit-btn" onclick="toggleEdit('jueves')">Editar</button>
+    </div>
+    <div class="section-card">
+      <h3>Calentamiento</h3>
+      <div class="content-text" id="jueves-calentamiento">2 rondas:
+- 500m row fácil
+- 10 good mornings con barra vacía
+- 10 lateral lunges
+- 15 banded pull-aparts</div>
+      <textarea id="jueves-calentamiento-edit"></textarea>
+    </div>
+    <div class="section-card wod-highlight">
+      <h3>⚡ WOD</h3>
+      <div class="content-text" id="jueves-wod">5 Rondas para tiempo:
+- 400m Run
+- 15 OHS (40/25 kg)
+- 10 Pull-ups
+
+Cap: 25 min</div>
+      <textarea id="jueves-wod-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Fuerza / Skill</h3>
+      <div class="content-text" id="jueves-fuerza">Overhead Squat – trabajar movilidad y técnica
+5 × 3 al 60-65% 1RM
+Pausa 2 seg en el fondo.</div>
+      <textarea id="jueves-fuerza-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Cool Down</h3>
+      <div class="content-text" id="jueves-cooldown">- Couch stretch 2 min cada pierna
+- Lat stretch en rack 1 min
+- Ankle mobility drill 2 min</div>
+      <textarea id="jueves-cooldown-edit"></textarea>
+    </div>
+  </div>
+
+  <!-- VIERNES -->
+  <div id="panel-viernes" class="day-panel">
+    <div class="day-header">
+      <div class="day-title">Viernes <span>/ Día 5</span></div>
+      <button class="edit-btn" onclick="toggleEdit('viernes')">Editar</button>
+    </div>
+    <div class="section-card">
+      <h3>Calentamiento</h3>
+      <div class="content-text" id="viernes-calentamiento">Cindy Ligera – 10 min:
+- 5 ring rows
+- 10 incline push-ups
+- 15 goblet squats (ligero)
+Al 50% de intensidad.</div>
+      <textarea id="viernes-calentamiento-edit"></textarea>
+    </div>
+    <div class="section-card wod-highlight">
+      <h3>⚡ WOD — HERO / BENCHMARK</h3>
+      <div class="content-text" id="viernes-wod">"FRAN"
+21-15-9 para tiempo:
+- Thrusters (42.5/30 kg)
+- Pull-ups
+
+Objetivo: &lt; 5 min Rx / &lt; 8 min Scaled</div>
+      <textarea id="viernes-wod-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Fuerza / Skill</h3>
+      <div class="content-text" id="viernes-fuerza">Clean & Jerk – técnica
+6 × 2 al 70% 1RM
+Foco en la recepción y el split jerk.</div>
+      <textarea id="viernes-fuerza-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Cool Down</h3>
+      <div class="content-text" id="viernes-cooldown">- Pigeon pose 2 min cada lado
+- Banded shoulder distraction 2 min
+- 5 min stretching libre</div>
+      <textarea id="viernes-cooldown-edit"></textarea>
+    </div>
+  </div>
+
+  <!-- SÁBADO -->
+  <div id="panel-sabado" class="day-panel">
+    <div class="day-header">
+      <div class="day-title">Sábado <span>/ Día 6</span></div>
+      <button class="edit-btn" onclick="toggleEdit('sabado')">Editar</button>
+    </div>
+    <div class="section-card">
+      <h3>Calentamiento</h3>
+      <div class="content-text" id="sabado-calentamiento">Partner warm-up:
+- 400m run juntos
+- 10 wall balls alternados
+- 10 jumping jacks + 10 air squats
+- Movilidad de cadera 2 min</div>
+      <textarea id="sabado-calentamiento-edit"></textarea>
+    </div>
+    <div class="section-card wod-highlight">
+      <h3>⚡ WOD — PARTNER</h3>
+      <div class="content-text" id="sabado-wod">Partner WOD – AMRAP 30 min:
+(mientras uno trabaja, el otro descansa)
+- 10 Synchro Wall Balls (9/6 kg)
+- 10 Synchro Box Jumps
+- 200m Run juntos
+
+Puntaje: rondas totales completadas.</div>
+      <textarea id="sabado-wod-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Fuerza / Skill</h3>
+      <div class="content-text" id="sabado-fuerza">Opcional – trabajar debilidades:
+- Muscle-up progressions
+- Pistol squat drill
+- Double under practice (10 min)</div>
+      <textarea id="sabado-fuerza-edit"></textarea>
+    </div>
+    <div class="section-card">
+      <h3>Cool Down</h3>
+      <div class="content-text" id="sabado-cooldown">- Stretching en pareja 10 min
+- Retroalimentación de la semana
+- Hidratación + recuperación activa</div>
+      <textarea id="sabado-cooldown-edit"></textarea>
+    </div>
+  </div>
+
+  <!-- DOMINGO -->
+  <div id="panel-domingo" class="day-panel">
+    <div class="day-header">
+      <div class="day-title">Domingo <span>/ Descanso</span></div>
+    </div>
+    <div class="rest-day">
+      <div class="icon">🛌</div>
+      <h2>Día de descanso</h2>
+      <p>Recuperación activa, movilidad suave o completo reposo.</p>
+    </div>
+    <div class="section-card">
+      <h3>Notas de recuperación</h3>
+      <div class="content-text" id="domingo-notas">- Foam roller cuerpo completo 10 min
+- Yoga o stretching 20-30 min
+- Hidratación mínima 2.5 L
+- Dormir 8 horas</div>
+      <textarea id="domingo-notas-edit"></textarea>
+    </div>
+    <button class="edit-btn" style="margin-top:8px" onclick="toggleEdit('domingo')">Editar notas</button>
+  </div>
+
+</main>
+
+<script>
+  const DAYS = ['lunes','martes','miercoles','jueves','viernes','sabado','domingo'];
+
+  const SECTIONS = {
+    lunes:     ['calentamiento','wod','fuerza','cooldown'],
+    martes:    ['calentamiento','wod','fuerza','cooldown'],
+    miercoles: ['calentamiento','wod','fuerza','cooldown'],
+    jueves:    ['calentamiento','wod','fuerza','cooldown'],
+    viernes:   ['calentamiento','wod','fuerza','cooldown'],
+    sabado:    ['calentamiento','wod','fuerza','cooldown'],
+    domingo:   ['notas'],
+  };
+
+  let editing = {};
+
+  function showDay(day, btn) {
+    DAYS.forEach(d => {
+      document.getElementById('panel-' + d).classList.remove('active');
+    });
+    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + day).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleEdit(day) {
+    const sections = SECTIONS[day];
+    const isEditing = editing[day];
+
+    if (!isEditing) {
+      sections.forEach(sec => {
+        const display = document.getElementById(day + '-' + sec);
+        const textarea = document.getElementById(day + '-' + sec + '-edit');
+        textarea.value = display.textContent;
+        display.style.display = 'none';
+        textarea.style.display = 'block';
+      });
+      const btn = document.querySelector('#panel-' + day + ' .edit-btn');
+      if (btn) {
+        btn.textContent = 'Guardar';
+        btn.classList.remove('edit-btn');
+        btn.classList.add('save-btn');
+        btn.setAttribute('onclick', "toggleEdit('" + day + "')");
+      }
+      editing[day] = true;
+    } else {
+      sections.forEach(sec => {
+        const display = document.getElementById(day + '-' + sec);
+        const textarea = document.getElementById(day + '-' + sec + '-edit');
+        display.textContent = textarea.value;
+        textarea.style.display = 'none';
+        display.style.display = '';
+        saveToStorage(day, sec, textarea.value);
+      });
+      const btn = document.querySelector('#panel-' + day + ' .save-btn');
+      if (btn) {
+        btn.textContent = 'Editar';
+        btn.classList.remove('save-btn');
+        btn.classList.add('edit-btn');
+        btn.setAttribute('onclick', "toggleEdit('" + day + "')");
+      }
+      editing[day] = false;
+    }
+  }
+
+  function saveToStorage(day, section, value) {
+    try {
+      localStorage.setItem('cf_' + day + '_' + section, value);
+    } catch(e) {}
+  }
+
+  function loadFromStorage() {
+    DAYS.forEach(day => {
+      const sections = SECTIONS[day];
+      sections.forEach(sec => {
+        const saved = localStorage.getItem('cf_' + day + '_' + sec);
+        if (saved !== null) {
+          const el = document.getElementById(day + '-' + sec);
+          if (el) el.textContent = saved;
+        }
+      });
+    });
+    const semana = localStorage.getItem('cf_semana');
+    if (semana) document.getElementById('semana-input').value = semana;
+  }
+
+  document.getElementById('semana-input').addEventListener('input', function() {
+    try { localStorage.setItem('cf_semana', this.value); } catch(e) {}
+  });
+
+  loadFromStorage();
+</script>
+
+</body>
+</html>
