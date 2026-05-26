@@ -90,7 +90,7 @@
     }
     .day-btn.active .rest-badge { background: rgba(230,57,70,0.3); color: #e63946; }
 
-    /* ── Main ── */
+    /* ── Layout principal ── */
     main { padding: 32px; max-width: 900px; margin: 0 auto; }
 
     .day-panel { display: none; animation: fadeIn 0.3s ease; }
@@ -114,40 +114,35 @@
 
     .edit-btn {
       padding: 8px 20px;
-      background: #e63946;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
+      background: #e63946; color: #fff; border: none;
+      border-radius: 6px; font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
       transition: background 0.2s;
     }
     .edit-btn:hover { background: #c1121f; }
     .save-btn {
       padding: 8px 20px;
-      background: #2d6a4f;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
+      background: #2d6a4f; color: #fff; border: none;
+      border-radius: 6px; font-size: 0.8rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; cursor: pointer;
       transition: background 0.2s;
     }
     .save-btn:hover { background: #1b4332; }
 
-    /* ── Sección principal ── */
+    /* ── Sección card ── */
     .section-card {
       background: #1a1a1a;
       border: 1px solid #2a2a2a;
       border-radius: 10px;
       padding: 20px 24px;
-      margin-bottom: 0;
+    }
+    .section-card .sec-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
     }
     .section-card h3 {
       font-size: 0.72rem;
@@ -155,16 +150,51 @@
       text-transform: uppercase;
       letter-spacing: 2px;
       color: #e63946;
-      margin-bottom: 12px;
     }
-    .section-card .content-text {
+    /* hint de formato en modo edición */
+    .edit-hint {
+      display: none;
+      font-size: 0.7rem;
+      color: #555;
+      background: #111;
+      border: 1px dashed #333;
+      border-radius: 6px;
+      padding: 5px 10px;
+      line-height: 1.5;
+    }
+    .edit-hint code { color: #888; background: #1a1a1a; padding: 1px 4px; border-radius: 3px; }
+    .edit-hint.visible { display: block; }
+
+    /* contenido renderizado */
+    .content-text {
       color: #ccc;
-      line-height: 1.8;
-      white-space: pre-wrap;
+      line-height: 2;
       font-size: 0.95rem;
-      min-height: 20px;
     }
-    .section-card .content-text:empty::after { content: 'Sin contenido'; color: #444; font-style: italic; }
+    .content-text:empty::after { content: '—'; color: #333; }
+
+    /* link inline de video */
+    .vid-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #e63946;
+      background: rgba(230,57,70,0.1);
+      border: 1px solid rgba(230,57,70,0.3);
+      border-radius: 12px;
+      padding: 2px 9px;
+      text-decoration: none;
+      vertical-align: middle;
+      margin-left: 6px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .vid-link:hover { background: rgba(230,57,70,0.22); border-color: rgba(230,57,70,0.6); }
+    .vid-link svg { flex-shrink: 0; }
+
+    /* textarea edición */
     .section-card textarea {
       width: 100%;
       background: #111;
@@ -182,7 +212,7 @@
     }
     .section-card textarea:focus { border-color: #e63946; }
 
-    /* Colores por tipo de sección */
+    /* colores por tipo */
     .sec-calentamiento  { border-left: 4px solid #f4a261; }
     .sec-calentamiento h3 { color: #f4a261; }
     .sec-levantamiento  { border-left: 4px solid #a8dadc; }
@@ -191,8 +221,6 @@
     .sec-workout h3     { color: #e63946; }
     .sec-accesorios     { border-left: 4px solid #9b72cf; }
     .sec-accesorios h3  { color: #9b72cf; }
-    .sec-videos         { border-left: 4px solid #457b9d; }
-    .sec-videos h3      { color: #457b9d; }
 
     /* ── Nota entre secciones ── */
     .note-bridge {
@@ -200,15 +228,14 @@
       margin: 6px 0;
       padding: 10px 16px 10px 44px;
       background: rgba(255,214,0,0.04);
-      border: 1px dashed rgba(255,214,0,0.18);
+      border: 1px dashed rgba(255,214,0,0.15);
       border-radius: 8px;
       min-height: 38px;
     }
     .note-bridge::before {
       content: '📝';
       position: absolute;
-      left: 14px;
-      top: 50%;
+      left: 14px; top: 50%;
       transform: translateY(-50%);
       font-size: 0.9rem;
     }
@@ -219,24 +246,24 @@
       white-space: pre-wrap;
       min-height: 16px;
     }
-    .note-bridge .note-text:empty::after { content: 'Sin nota'; color: #3a3200; font-style: italic; }
+    .note-bridge .note-text:empty::after { content: 'Sin nota'; color: #2e2700; font-style: italic; }
     .note-bridge textarea {
       width: 100%;
       background: transparent;
       border: none;
-      border-bottom: 1px dashed rgba(255,214,0,0.3);
+      border-bottom: 1px dashed rgba(255,214,0,0.25);
       color: #e6c800;
       font-family: inherit;
       font-size: 0.85rem;
       line-height: 1.6;
       padding: 2px 0;
       resize: vertical;
-      min-height: 40px;
+      min-height: 36px;
       outline: none;
       display: none;
     }
-    .note-bridge textarea::placeholder { color: rgba(230,200,0,0.3); }
-    .note-bridge textarea:focus { border-bottom-color: rgba(255,214,0,0.6); }
+    .note-bridge textarea::placeholder { color: rgba(230,200,0,0.25); }
+    .note-bridge textarea:focus { border-bottom-color: rgba(255,214,0,0.5); }
 
     /* ── Workout 2 toggle ── */
     .w2-toggle-row {
@@ -248,9 +275,9 @@
     .w2-toggle-btn {
       padding: 7px 18px;
       background: transparent;
-      border: 1px dashed #333;
+      border: 1px dashed #2a2a2a;
       border-radius: 20px;
-      color: #555;
+      color: #444;
       font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 1px;
@@ -263,32 +290,6 @@
 
     .w2-block { display: none; }
     .w2-block.visible { display: block; }
-
-    /* ── Videos ── */
-    .video-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-    .video-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #111;
-      border: 1px solid #2a2a2a;
-      border-radius: 8px;
-      padding: 10px 14px;
-      text-decoration: none;
-      color: #f0f0f0;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .video-item:hover { border-color: #457b9d; background: #151f2a; }
-    .video-thumb { width: 90px; height: 52px; object-fit: cover; border-radius: 4px; flex-shrink: 0; background: #222; }
-    .video-thumb-placeholder {
-      width: 90px; height: 52px; background: #222; border-radius: 4px;
-      display: flex; align-items: center; justify-content: center;
-      flex-shrink: 0; font-size: 1.4rem;
-    }
-    .video-info { display: flex; flex-direction: column; gap: 2px; }
-    .video-info .v-title { font-size: 0.9rem; font-weight: 600; color: #f0f0f0; }
-    .video-info .v-url { font-size: 0.75rem; color: #555; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 340px; }
-    .video-hint { font-size: 0.78rem; color: #555; margin-top: 8px; line-height: 1.6; }
 
     /* ── Descanso ── */
     .rest-day { text-align: center; padding: 50px 20px 30px; }
@@ -312,38 +313,23 @@
       background: transparent;
       border: none;
       border-bottom: 1px solid #2a2a2a;
-      color: #fff;
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 4px 0;
-      outline: none;
-      width: 240px;
+      color: #fff; font-size: 1rem; font-weight: 700;
+      padding: 4px 0; outline: none; width: 240px;
     }
     .week-banner input:focus { border-bottom-color: #e63946; }
     .week-banner input[readonly] { cursor: default; pointer-events: none; }
 
-    /* Separador visual entre secciones */
-    .sec-gap { height: 6px; }
-
     /* ── Modal contraseña ── */
     .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      z-index: 1000;
-      align-items: center;
-      justify-content: center;
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.8); z-index: 1000;
+      align-items: center; justify-content: center;
     }
     .modal-overlay.visible { display: flex; animation: fadeIn 0.2s ease; }
     .modal-box {
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-top: 3px solid #e63946;
-      border-radius: 12px;
-      padding: 32px;
-      width: 340px;
-      text-align: center;
+      background: #1a1a1a; border: 1px solid #333;
+      border-top: 3px solid #e63946; border-radius: 12px;
+      padding: 32px; width: 340px; text-align: center;
     }
     .modal-box .lock-icon { font-size: 2.5rem; margin-bottom: 12px; }
     .modal-box h2 { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 6px; }
@@ -410,22 +396,19 @@
 </header>
 
 <main>
-
   <div class="week-banner">
     <span class="week-label">Semana</span>
     <input type="text" id="semana-input" placeholder="Ej: 26 May – 1 Jun 2025" readonly />
   </div>
 
-  <!-- ═══════════════════ DÍAS ═══════════════════ -->
+  <div id="panel-lunes"     class="day-panel active" data-day="lunes"></div>
+  <div id="panel-martes"    class="day-panel"        data-day="martes"></div>
+  <div id="panel-miercoles" class="day-panel"        data-day="miercoles"></div>
+  <div id="panel-jueves"    class="day-panel"        data-day="jueves"></div>
+  <div id="panel-viernes"   class="day-panel"        data-day="viernes"></div>
+  <div id="panel-sabado"    class="day-panel"        data-day="sabado"></div>
 
-  <div id="panel-lunes" class="day-panel active"   data-day="lunes"></div>
-  <div id="panel-martes" class="day-panel"         data-day="martes"></div>
-  <div id="panel-miercoles" class="day-panel"      data-day="miercoles"></div>
-  <div id="panel-jueves" class="day-panel"         data-day="jueves"></div>
-  <div id="panel-viernes" class="day-panel"        data-day="viernes"></div>
-  <div id="panel-sabado" class="day-panel"         data-day="sabado"></div>
-
-  <!-- DOMINGO (estático) -->
+  <!-- DOMINGO -->
   <div id="panel-domingo" class="day-panel">
     <div class="day-header">
       <div class="day-title">Domingo <span>/ Descanso</span></div>
@@ -436,452 +419,384 @@
       <p>Recuperación activa, movilidad suave o completo reposo.</p>
     </div>
     <div class="section-card sec-accesorios" style="margin-top:16px">
-      <h3>Notas de recuperación</h3>
-      <div class="content-text" id="domingo-notas">- Foam roller cuerpo completo 10 min
-- Yoga o stretching 20-30 min
-- Hidratación mínima 2.5 L
-- Dormir 8 horas</div>
+      <div class="sec-header"><h3>Notas de recuperación</h3></div>
+      <div class="content-text" id="domingo-notas"></div>
       <textarea id="domingo-notas-edit"></textarea>
     </div>
-    <div class="sec-gap"></div>
-    <div class="day-header" style="margin-top:16px;margin-bottom:0">
-      <div></div>
+    <div style="display:flex;justify-content:flex-end;margin-top:12px">
       <button class="edit-btn" id="domingo-edit-btn" onclick="toggleDomingo()">Editar notas</button>
     </div>
   </div>
-
 </main>
 
 <script>
-  // ─── Constantes ─────────────────────────────────────────────────────────────
-  const DAYS_TRAINING = ['lunes','martes','miercoles','jueves','viernes','sabado'];
-  const DAYS_ALL      = [...DAYS_TRAINING, 'domingo'];
+// ─── Datos ────────────────────────────────────────────────────────────────────
+const DAYS_TRAINING = ['lunes','martes','miercoles','jueves','viernes','sabado'];
+const DAYS_ALL      = [...DAYS_TRAINING, 'domingo'];
+const MAIN_SECS     = ['calentamiento','levantamiento','workout1','workout2','accesorios'];
+const NOTE_KEYS     = ['nota1','nota2','nota3','nota4'];
 
-  // Secciones de texto por día (sin notas)
-  const MAIN_SECS = ['calentamiento','levantamiento','workout1','workout2','accesorios'];
-  // Notas: nota_post_calentamiento, nota_post_levantamiento, nota_post_workout1, nota_post_workout2
-  const NOTE_KEYS = ['nota1','nota2','nota3','nota4'];
+const DAY_LABELS = {
+  lunes:'Lunes / Día 1', martes:'Martes / Día 2', miercoles:'Miércoles / Día 3',
+  jueves:'Jueves / Día 4', viernes:'Viernes / Día 5', sabado:'Sábado / Día 6',
+};
 
-  // Defaults por sección
-  const DEFAULTS = {
-    calentamiento: `3 rondas:
+const DEFAULTS = {
+  calentamiento:
+`3 rondas:
 - 400m trote suave
 - 10 hip circles cada lado
 - 10 dislocaciones con palo
 - 15 hollow rocks`,
-    levantamiento: `Back Squat – 5 × 5
+  levantamiento:
+`Back Squat – 5 × 5
 Empezar al 70% 1RM.
 Aumentar carga si la técnica es sólida.`,
-    workout1: `AMRAP 20 min:
+  workout1:
+`AMRAP 20 min:
 - 5 Pull-ups
 - 10 Push-ups
-- 15 Air Squats
-
-*Rx: kipping pull-ups
-*Scaled: ring rows / knee push-ups`,
-    workout2: `Para tiempo:
-- 400m Run
-- 21 KB Swings (32/24 kg)
-- 400m Run
-
-Cap: 12 min`,
-    accesorios: `- 3 × 15 GHD Sit-ups
+- 15 Air Squats`,
+  workout2: '',
+  accesorios:
+`- 3 × 15 GHD Sit-ups
 - 3 × 12 Single-leg RDL cada lado
 - 2 min plank hold`,
-    nota1: '',
-    nota2: '',
-    nota3: '',
-    nota4: '',
-  };
+  nota1:'', nota2:'', nota3:'', nota4:'',
+};
 
-  // ─── Contraseña ──────────────────────────────────────────────────────────────
-  // Contraseña por defecto: crossfit2025
-  // Para cambiarla estando desbloqueado: cambiarContrasena('nueva_clave')
-  let sessionUnlocked = false;
-  let pendingCb = null;
+const DOMINGO_DEFAULT =
+`- Foam roller cuerpo completo 10 min
+- Yoga o stretching 20-30 min
+- Hidratación mínima 2.5 L
+- Dormir 8 horas`;
 
-  async function sha256(str) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-  }
+// ─── Contraseña ───────────────────────────────────────────────────────────────
+// Contraseña por defecto: crossfit2025
+// Para cambiarla estando desbloqueado abre la consola y escribe:
+//   cambiarContrasena('nueva_clave')
+let sessionUnlocked = false;
+let pendingCb = null;
 
-  async function getStoredHash() {
-    let h = localStorage.getItem('cf_pwd_hash');
-    if (!h) { h = await sha256('crossfit2025'); localStorage.setItem('cf_pwd_hash', h); }
-    return h;
-  }
-
-  window.cambiarContrasena = async function(nueva) {
-    if (!sessionUnlocked) { alert('Debes estar desbloqueado primero.'); return; }
-    localStorage.setItem('cf_pwd_hash', await sha256(nueva));
-    alert('Contraseña cambiada correctamente.');
-  };
-
-  function requireAuth(cb) {
-    if (sessionUnlocked) { cb(); return; }
-    pendingCb = cb;
-    openPwdModal();
-  }
-
-  function openPwdModal() {
+async function sha256(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+async function getStoredHash() {
+  let h = localStorage.getItem('cf_pwd_hash');
+  if (!h) { h = await sha256('crossfit2025'); localStorage.setItem('cf_pwd_hash', h); }
+  return h;
+}
+window.cambiarContrasena = async function(nueva) {
+  if (!sessionUnlocked) { alert('Debes estar desbloqueado primero.'); return; }
+  localStorage.setItem('cf_pwd_hash', await sha256(nueva));
+  alert('Contraseña cambiada correctamente.');
+};
+function requireAuth(cb) {
+  if (sessionUnlocked) { cb(); return; }
+  pendingCb = cb; openPwdModal();
+}
+function openPwdModal() {
+  document.getElementById('pwd-input').value = '';
+  document.getElementById('pwd-error').textContent = '';
+  document.getElementById('pwd-modal').classList.add('visible');
+  setTimeout(() => document.getElementById('pwd-input').focus(), 80);
+}
+function closePwdModal() {
+  document.getElementById('pwd-modal').classList.remove('visible');
+  pendingCb = null;
+}
+async function confirmPwd() {
+  const val = document.getElementById('pwd-input').value;
+  if (!val) return;
+  if (await sha256(val) === await getStoredHash()) {
+    sessionUnlocked = true;
+    document.getElementById('unlock-badge').classList.add('visible');
+    closePwdModal();
+    if (pendingCb) { pendingCb(); pendingCb = null; }
+  } else {
+    document.getElementById('pwd-error').textContent = 'Contraseña incorrecta';
     document.getElementById('pwd-input').value = '';
-    document.getElementById('pwd-error').textContent = '';
-    document.getElementById('pwd-modal').classList.add('visible');
-    setTimeout(() => document.getElementById('pwd-input').focus(), 80);
+    document.getElementById('pwd-input').focus();
   }
+}
+function lockSession() {
+  sessionUnlocked = false;
+  document.getElementById('unlock-badge').classList.remove('visible');
+  DAYS_TRAINING.forEach(d => { if (editingState[d]) doSave(d); });
+  if (editingDomingo) toggleDomingo();
+}
+document.getElementById('pwd-modal').addEventListener('click', e => {
+  if (e.target.id === 'pwd-modal') closePwdModal();
+});
 
-  function closePwdModal() {
-    document.getElementById('pwd-modal').classList.remove('visible');
-    pendingCb = null;
-  }
+// ─── Navegación ───────────────────────────────────────────────────────────────
+function showDay(day, btn) {
+  DAYS_ALL.forEach(d => document.getElementById('panel-' + d).classList.remove('active'));
+  document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + day).classList.add('active');
+  btn.classList.add('active');
+}
 
-  async function confirmPwd() {
-    const val = document.getElementById('pwd-input').value;
-    if (!val) return;
-    const hash = await sha256(val);
-    if (hash === await getStoredHash()) {
-      sessionUnlocked = true;
-      document.getElementById('unlock-badge').classList.add('visible');
-      closePwdModal();
-      if (pendingCb) { pendingCb(); pendingCb = null; }
-    } else {
-      document.getElementById('pwd-error').textContent = 'Contraseña incorrecta';
-      document.getElementById('pwd-input').value = '';
-      document.getElementById('pwd-input').focus();
-    }
-  }
+// ─── Render de contenido con links inline ─────────────────────────────────────
+// Formato: "Nombre del ejercicio [https://...]"
+// En display se convierte en: "Nombre del ejercicio ▶ ver video"
+const URL_PATTERN = /\[(https?:\/\/[^\]]+)\]/g;
 
-  function lockSession() {
-    sessionUnlocked = false;
-    document.getElementById('unlock-badge').classList.remove('visible');
-    DAYS_TRAINING.forEach(d => { if (editingState[d]) doSave(d); });
-    if (editingDomingo) toggleDomingo();
-  }
+const PLAY_ICON = `<svg width="8" height="9" viewBox="0 0 8 9" fill="currentColor"><path d="M0 0 L8 4.5 L0 9 Z"/></svg>`;
 
-  document.getElementById('pwd-modal').addEventListener('click', e => {
-    if (e.target.id === 'pwd-modal') closePwdModal();
+function renderContent(rawText) {
+  // Escapar HTML primero
+  const escaped = rawText
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;');
+
+  // Convertir [URL] → botón "ver video"
+  const withLinks = escaped.replace(
+    /\[(https?:\/\/[^\]]+)\]/g,
+    (_, url) => `<a class="vid-link" href="${url}" target="_blank" rel="noopener noreferrer">${PLAY_ICON} ver video</a>`
+  );
+
+  // Saltos de línea
+  return withLinks.replace(/\n/g, '<br>');
+}
+
+function getRawText(day, key) {
+  const saved = localStorage.getItem('cf_' + day + '_' + key);
+  return saved !== null ? saved : (DEFAULTS[key] ?? '');
+}
+
+// ─── Construcción del panel ───────────────────────────────────────────────────
+function buildDayPanel(day) {
+  const panel = document.getElementById('panel-' + day);
+  const [title, sub] = DAY_LABELS[day].split(' / ');
+  panel.innerHTML = `
+    <div class="day-header">
+      <div class="day-title">${title} <span>/ ${sub}</span></div>
+      <button class="edit-btn" id="${day}-edit-btn" onclick="toggleEdit('${day}')">Editar</button>
+    </div>
+
+    <!-- CALENTAMIENTO -->
+    <div class="section-card sec-calentamiento">
+      <div class="sec-header">
+        <h3>🔥 Calentamiento</h3>
+        <span class="edit-hint" id="${day}-calentamiento-hint">Para añadir video: escribe el nombre del ejercicio y pega la URL entre corchetes<br><code>Ejercicio [https://youtube.com/...]</code></span>
+      </div>
+      <div class="content-text" id="${day}-calentamiento"></div>
+      <textarea id="${day}-calentamiento-edit" placeholder="Describe el calentamiento...&#10;Ej: - Thruster [https://youtube.com/...]"></textarea>
+    </div>
+
+    <div class="note-bridge">
+      <div class="note-text" id="${day}-nota1"></div>
+      <textarea id="${day}-nota1-edit" placeholder="Nota para el atleta..."></textarea>
+    </div>
+
+    <!-- LEVANTAMIENTO -->
+    <div class="section-card sec-levantamiento">
+      <div class="sec-header">
+        <h3>🏋️ Levantamiento</h3>
+        <span class="edit-hint" id="${day}-levantamiento-hint">Para añadir video: <code>Ejercicio [https://youtube.com/...]</code></span>
+      </div>
+      <div class="content-text" id="${day}-levantamiento"></div>
+      <textarea id="${day}-levantamiento-edit" placeholder="Series, repeticiones, % de 1RM..."></textarea>
+    </div>
+
+    <div class="note-bridge">
+      <div class="note-text" id="${day}-nota2"></div>
+      <textarea id="${day}-nota2-edit" placeholder="Nota para el atleta..."></textarea>
+    </div>
+
+    <!-- WORKOUT 1 -->
+    <div class="section-card sec-workout">
+      <div class="sec-header">
+        <h3>⚡ Workout 1</h3>
+        <span class="edit-hint" id="${day}-workout1-hint">Para añadir video: <code>Ejercicio [https://youtube.com/...]</code></span>
+      </div>
+      <div class="content-text" id="${day}-workout1"></div>
+      <textarea id="${day}-workout1-edit" placeholder="AMRAP, Para tiempo, EMOM..."></textarea>
+    </div>
+
+    <div class="note-bridge">
+      <div class="note-text" id="${day}-nota3"></div>
+      <textarea id="${day}-nota3-edit" placeholder="Nota para el atleta..."></textarea>
+    </div>
+
+    <!-- WORKOUT 2 toggle -->
+    <div class="w2-toggle-row">
+      <button class="w2-toggle-btn" id="${day}-w2-btn" onclick="toggleW2('${day}')">＋ Agregar Workout 2</button>
+    </div>
+
+    <div class="w2-block" id="${day}-w2-block">
+      <div class="section-card sec-workout">
+        <div class="sec-header">
+          <h3>⚡ Workout 2</h3>
+          <span class="edit-hint" id="${day}-workout2-hint">Para añadir video: <code>Ejercicio [https://youtube.com/...]</code></span>
+        </div>
+        <div class="content-text" id="${day}-workout2"></div>
+        <textarea id="${day}-workout2-edit" placeholder="Segundo workout del día..."></textarea>
+      </div>
+      <div class="note-bridge">
+        <div class="note-text" id="${day}-nota4"></div>
+        <textarea id="${day}-nota4-edit" placeholder="Nota para el atleta..."></textarea>
+      </div>
+    </div>
+
+    <!-- ACCESORIOS -->
+    <div class="section-card sec-accesorios" style="margin-top:6px">
+      <div class="sec-header">
+        <h3>💪 Accesorios</h3>
+        <span class="edit-hint" id="${day}-accesorios-hint">Para añadir video: <code>Ejercicio [https://youtube.com/...]</code></span>
+      </div>
+      <div class="content-text" id="${day}-accesorios"></div>
+      <textarea id="${day}-accesorios-edit" placeholder="Ejercicios accesorios, core, movilidad..."></textarea>
+    </div>
+  `;
+}
+
+// ─── Estado de edición ────────────────────────────────────────────────────────
+let editingState = {};
+
+function toggleEdit(day) {
+  requireAuth(() => {
+    if (!editingState[day]) doOpen(day);
+    else doSave(day);
+  });
+}
+
+function doOpen(day) {
+  // Secciones de texto
+  MAIN_SECS.forEach(k => {
+    const display = document.getElementById(day + '-' + k);
+    const ta      = document.getElementById(day + '-' + k + '-edit');
+    const hint    = document.getElementById(day + '-' + k + '-hint');
+    if (!display || !ta) return;
+    ta.value = getRawText(day, k);
+    display.style.display = 'none';
+    ta.style.display = 'block';
+    if (hint) hint.classList.add('visible');
+  });
+  // Notas
+  NOTE_KEYS.forEach(k => {
+    const display = document.getElementById(day + '-' + k);
+    const ta      = document.getElementById(day + '-' + k + '-edit');
+    if (!display || !ta) return;
+    ta.value = getRawText(day, k);
+    display.style.display = 'none';
+    ta.style.display = 'block';
   });
 
-  // ─── Navegación ──────────────────────────────────────────────────────────────
-  function showDay(day, btn) {
-    DAYS_ALL.forEach(d => document.getElementById('panel-' + d).classList.remove('active'));
-    document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById('panel-' + day).classList.add('active');
-    btn.classList.add('active');
-  }
+  document.getElementById('semana-input').removeAttribute('readonly');
+  const btn = document.getElementById(day + '-edit-btn');
+  if (btn) { btn.textContent = 'Guardar'; btn.className = 'save-btn'; }
+  editingState[day] = true;
+}
 
-  // ─── Render dinámico del panel de un día ────────────────────────────────────
-  const DAY_LABELS = {
-    lunes:'Lunes / Día 1', martes:'Martes / Día 2', miercoles:'Miércoles / Día 3',
-    jueves:'Jueves / Día 4', viernes:'Viernes / Día 5', sabado:'Sábado / Día 6',
-  };
+function doSave(day) {
+  MAIN_SECS.forEach(k => {
+    const display = document.getElementById(day + '-' + k);
+    const ta      = document.getElementById(day + '-' + k + '-edit');
+    const hint    = document.getElementById(day + '-' + k + '-hint');
+    if (!display || !ta) return;
+    const raw = ta.value;
+    display.innerHTML = renderContent(raw);
+    ta.style.display = 'none';
+    display.style.display = '';
+    if (hint) hint.classList.remove('visible');
+    try { localStorage.setItem('cf_' + day + '_' + k, raw); } catch(e) {}
+  });
+  NOTE_KEYS.forEach(k => {
+    const display = document.getElementById(day + '-' + k);
+    const ta      = document.getElementById(day + '-' + k + '-edit');
+    if (!display || !ta) return;
+    display.textContent = ta.value;
+    ta.style.display = 'none';
+    display.style.display = '';
+    try { localStorage.setItem('cf_' + day + '_' + k, ta.value); } catch(e) {}
+  });
 
-  function buildDayPanel(day) {
-    const panel = document.getElementById('panel-' + day);
-    const [title, sub] = DAY_LABELS[day].split(' / ');
-    panel.innerHTML = `
-      <div class="day-header">
-        <div class="day-title">${title} <span>/ ${sub}</span></div>
-        <button class="edit-btn" id="${day}-edit-btn" onclick="toggleEdit('${day}')">Editar</button>
-      </div>
+  document.getElementById('semana-input').setAttribute('readonly', true);
+  try { localStorage.setItem('cf_semana', document.getElementById('semana-input').value); } catch(e) {}
 
-      <!-- CALENTAMIENTO -->
-      <div class="section-card sec-calentamiento">
-        <h3>🔥 Calentamiento</h3>
-        <div class="content-text" id="${day}-calentamiento"></div>
-        <textarea id="${day}-calentamiento-edit" placeholder="Describe el calentamiento..."></textarea>
-      </div>
+  const btn = document.getElementById(day + '-edit-btn');
+  if (btn) { btn.textContent = 'Editar'; btn.className = 'edit-btn'; }
+  editingState[day] = false;
+}
 
-      <!-- NOTA 1 -->
-      <div class="note-bridge">
-        <div class="note-text" id="${day}-nota1"></div>
-        <textarea id="${day}-nota1-edit" placeholder="Nota para el entrenador / atleta..."></textarea>
-      </div>
+// ─── Workout 2 ────────────────────────────────────────────────────────────────
+function toggleW2(day) {
+  requireAuth(() => {
+    const block   = document.getElementById(day + '-w2-block');
+    const btn     = document.getElementById(day + '-w2-btn');
+    const visible = block.classList.toggle('visible');
+    btn.classList.toggle('active', visible);
+    btn.textContent = visible ? '✕ Quitar Workout 2' : '＋ Agregar Workout 2';
+    try { localStorage.setItem('cf_' + day + '_w2visible', visible ? '1' : '0'); } catch(e) {}
+  });
+}
 
-      <!-- LEVANTAMIENTO -->
-      <div class="section-card sec-levantamiento">
-        <h3>🏋️ Levantamiento</h3>
-        <div class="content-text" id="${day}-levantamiento"></div>
-        <textarea id="${day}-levantamiento-edit" placeholder="Series, repeticiones, % de 1RM..."></textarea>
-      </div>
+// ─── Domingo ──────────────────────────────────────────────────────────────────
+let editingDomingo = false;
 
-      <!-- NOTA 2 -->
-      <div class="note-bridge">
-        <div class="note-text" id="${day}-nota2"></div>
-        <textarea id="${day}-nota2-edit" placeholder="Nota para el entrenador / atleta..."></textarea>
-      </div>
-
-      <!-- WORKOUT 1 -->
-      <div class="section-card sec-workout">
-        <h3>⚡ Workout 1</h3>
-        <div class="content-text" id="${day}-workout1"></div>
-        <textarea id="${day}-workout1-edit" placeholder="AMRAP, Para tiempo, EMOM..."></textarea>
-      </div>
-
-      <!-- NOTA 3 -->
-      <div class="note-bridge">
-        <div class="note-text" id="${day}-nota3"></div>
-        <textarea id="${day}-nota3-edit" placeholder="Nota para el entrenador / atleta..."></textarea>
-      </div>
-
-      <!-- WORKOUT 2 toggle -->
-      <div class="w2-toggle-row">
-        <button class="w2-toggle-btn" id="${day}-w2-btn" onclick="toggleW2('${day}')">＋ Agregar Workout 2</button>
-      </div>
-
-      <!-- WORKOUT 2 block -->
-      <div class="w2-block" id="${day}-w2-block">
-        <div class="section-card sec-workout">
-          <h3>⚡ Workout 2</h3>
-          <div class="content-text" id="${day}-workout2"></div>
-          <textarea id="${day}-workout2-edit" placeholder="Segundo workout del día..."></textarea>
-        </div>
-        <div class="note-bridge">
-          <div class="note-text" id="${day}-nota4"></div>
-          <textarea id="${day}-nota4-edit" placeholder="Nota para el entrenador / atleta..."></textarea>
-        </div>
-      </div>
-
-      <!-- ACCESORIOS -->
-      <div class="section-card sec-accesorios" style="margin-top:6px">
-        <h3>💪 Accesorios</h3>
-        <div class="content-text" id="${day}-accesorios"></div>
-        <textarea id="${day}-accesorios-edit" placeholder="Ejercicios accesorios, core, movilidad..."></textarea>
-      </div>
-
-      <!-- VIDEOS -->
-      <div class="section-card sec-videos" style="margin-top:6px">
-        <h3>🎥 Videos de referencia</h3>
-        <ul class="video-list" id="${day}-videos-list"></ul>
-        <div id="${day}-videos-edit-area" style="display:none">
-          <p class="video-hint">Una línea por video → <strong>Nombre del ejercicio | URL de YouTube</strong></p>
-          <textarea id="${day}-videos-edit" style="display:block;margin-top:10px;min-height:80px"
-                    placeholder="Ej: Thruster técnica | https://www.youtube.com/watch?v=..."></textarea>
-        </div>
-      </div>
-    `;
-  }
-
-  // ─── Estado de edición ───────────────────────────────────────────────────────
-  let editingState = {};
-
-  function getAllTextKeys(day) {
-    const keys = [...MAIN_SECS, ...NOTE_KEYS];
-    return keys;
-  }
-
-  function toggleEdit(day) {
-    requireAuth(() => {
-      if (!editingState[day]) doOpen(day);
-      else doSave(day);
-    });
-  }
-
-  function doOpen(day) {
-    const keys = getAllTextKeys(day);
-    keys.forEach(k => {
-      const display = document.getElementById(day + '-' + k);
-      const ta = document.getElementById(day + '-' + k + '-edit');
-      if (!display || !ta) return;
-      ta.value = display.textContent;
+function toggleDomingo() {
+  requireAuth(() => {
+    const display = document.getElementById('domingo-notas');
+    const ta      = document.getElementById('domingo-notas-edit');
+    const btn     = document.getElementById('domingo-edit-btn');
+    if (!editingDomingo) {
+      ta.value = display.textContent || DOMINGO_DEFAULT;
       display.style.display = 'none';
       ta.style.display = 'block';
-    });
-
-    // Videos
-    const vta = document.getElementById(day + '-videos-edit');
-    const vlist = document.getElementById(day + '-videos-list');
-    if (vta && vlist) {
-      vta.value = loadVideos(day).map(v => v.label + ' | ' + v.url).join('\n');
-      vlist.style.display = 'none';
-      document.getElementById(day + '-videos-edit-area').style.display = 'block';
-    }
-
-    // Habilitar campo semana
-    document.getElementById('semana-input').removeAttribute('readonly');
-
-    const btn = document.getElementById(day + '-edit-btn');
-    if (btn) { btn.textContent = 'Guardar'; btn.className = 'save-btn'; }
-    editingState[day] = true;
-  }
-
-  function doSave(day) {
-    const keys = getAllTextKeys(day);
-    keys.forEach(k => {
-      const display = document.getElementById(day + '-' + k);
-      const ta = document.getElementById(day + '-' + k + '-edit');
-      if (!display || !ta) return;
+      btn.textContent = 'Guardar'; btn.className = 'save-btn';
+      editingDomingo = true;
+    } else {
       display.textContent = ta.value;
       ta.style.display = 'none';
       display.style.display = '';
-      try { localStorage.setItem('cf_' + day + '_' + k, ta.value); } catch(e) {}
-    });
-
-    // Videos
-    const vta = document.getElementById(day + '-videos-edit');
-    if (vta) {
-      const parsed = parseVideos(vta.value);
-      saveVideos(day, parsed);
-      renderVideos(day, parsed);
-      document.getElementById(day + '-videos-list').style.display = '';
-      document.getElementById(day + '-videos-edit-area').style.display = 'none';
+      btn.textContent = 'Editar notas'; btn.className = 'edit-btn';
+      try { localStorage.setItem('cf_domingo_notas', ta.value); } catch(e) {}
+      editingDomingo = false;
     }
-
-    document.getElementById('semana-input').setAttribute('readonly', true);
-    try { localStorage.setItem('cf_semana', document.getElementById('semana-input').value); } catch(e) {}
-
-    const btn = document.getElementById(day + '-edit-btn');
-    if (btn) { btn.textContent = 'Editar'; btn.className = 'edit-btn'; }
-    editingState[day] = false;
-  }
-
-  // ─── Workout 2 toggle ────────────────────────────────────────────────────────
-  function toggleW2(day) {
-    requireAuth(() => {
-      const block = document.getElementById(day + '-w2-block');
-      const btn   = document.getElementById(day + '-w2-btn');
-      const visible = block.classList.toggle('visible');
-      btn.classList.toggle('active', visible);
-      btn.textContent = visible ? '✕ Quitar Workout 2' : '＋ Agregar Workout 2';
-      try { localStorage.setItem('cf_' + day + '_w2visible', visible ? '1' : '0'); } catch(e) {}
-    });
-  }
-
-  // ─── Domingo ────────────────────────────────────────────────────────────────
-  let editingDomingo = false;
-
-  function toggleDomingo() {
-    requireAuth(() => {
-      const display = document.getElementById('domingo-notas');
-      const ta      = document.getElementById('domingo-notas-edit');
-      const btn     = document.getElementById('domingo-edit-btn');
-      if (!editingDomingo) {
-        ta.value = display.textContent;
-        display.style.display = 'none';
-        ta.style.display = 'block';
-        btn.textContent = 'Guardar'; btn.className = 'save-btn';
-        editingDomingo = true;
-      } else {
-        display.textContent = ta.value;
-        ta.style.display = 'none';
-        display.style.display = '';
-        btn.textContent = 'Editar notas'; btn.className = 'edit-btn';
-        try { localStorage.setItem('cf_domingo_notas', ta.value); } catch(e) {}
-        editingDomingo = false;
-      }
-    });
-  }
-
-  // ─── Campo semana ────────────────────────────────────────────────────────────
-  document.getElementById('semana-input').addEventListener('click', function() {
-    if (this.hasAttribute('readonly')) requireAuth(() => { this.removeAttribute('readonly'); this.focus(); });
   });
+}
 
-  // ─── Videos ─────────────────────────────────────────────────────────────────
-  function getYouTubeId(url) {
-    try {
-      const u = new URL(url);
-      if (u.hostname.includes('youtu.be')) return u.pathname.slice(1).split('?')[0];
-      return u.searchParams.get('v');
-    } catch { return null; }
+// ─── Campo semana ─────────────────────────────────────────────────────────────
+document.getElementById('semana-input').addEventListener('click', function() {
+  if (this.hasAttribute('readonly'))
+    requireAuth(() => { this.removeAttribute('readonly'); this.focus(); });
+});
+
+// ─── Carga inicial ────────────────────────────────────────────────────────────
+function loadDay(day) {
+  MAIN_SECS.forEach(k => {
+    const el = document.getElementById(day + '-' + k);
+    if (el) el.innerHTML = renderContent(getRawText(day, k));
+  });
+  NOTE_KEYS.forEach(k => {
+    const el = document.getElementById(day + '-' + k);
+    if (el) el.textContent = getRawText(day, k);
+  });
+  // Workout 2 visibilidad guardada
+  if (localStorage.getItem('cf_' + day + '_w2visible') === '1') {
+    const block = document.getElementById(day + '-w2-block');
+    const btn   = document.getElementById(day + '-w2-btn');
+    if (block) { block.classList.add('visible'); btn.classList.add('active'); btn.textContent = '✕ Quitar Workout 2'; }
   }
+}
 
-  function parseVideos(raw) {
-    return raw.split('\n')
-      .map(l => l.trim()).filter(l => l.includes('|'))
-      .map(l => { const [label,...rest]=l.split('|'); return {label:label.trim(),url:rest.join('|').trim()}; })
-      .filter(v => v.label && v.url);
-  }
+function init() {
+  DAYS_TRAINING.forEach(day => { buildDayPanel(day); loadDay(day); });
 
-  function esc(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  }
+  // Domingo
+  const domSaved = localStorage.getItem('cf_domingo_notas');
+  document.getElementById('domingo-notas').textContent = domSaved !== null ? domSaved : DOMINGO_DEFAULT;
 
-  function renderVideos(day, videos) {
-    const list = document.getElementById(day + '-videos-list');
-    if (!list) return;
-    list.innerHTML = '';
-    if (!videos.length) {
-      list.innerHTML = '<li style="color:#444;font-size:0.82rem">Sin videos aún. Edita el día para añadir.</li>';
-      return;
-    }
-    videos.forEach(v => {
-      const ytId = getYouTubeId(v.url);
-      const li = document.createElement('li');
-      const a  = document.createElement('a');
-      a.href = v.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.className = 'video-item';
+  // Semana
+  const sem = localStorage.getItem('cf_semana');
+  if (sem) document.getElementById('semana-input').value = sem;
+}
 
-      if (ytId) {
-        const img = document.createElement('img');
-        img.src = 'https://img.youtube.com/vi/' + ytId + '/mqdefault.jpg';
-        img.className = 'video-thumb'; img.alt = v.label;
-        img.onerror = function() {
-          const ph = document.createElement('div');
-          ph.className = 'video-thumb-placeholder'; ph.textContent = '▶';
-          this.parentElement.insertBefore(ph, this); this.remove();
-        };
-        a.appendChild(img);
-      } else {
-        const ph = document.createElement('div');
-        ph.className = 'video-thumb-placeholder'; ph.textContent = '🔗';
-        a.appendChild(ph);
-      }
-
-      const info = document.createElement('div');
-      info.className = 'video-info';
-      info.innerHTML = `<span class="v-title">${esc(v.label)}</span><span class="v-url">${esc(v.url)}</span>`;
-      a.appendChild(info); li.appendChild(a); list.appendChild(li);
-    });
-  }
-
-  function saveVideos(day, videos) {
-    try { localStorage.setItem('cf_' + day + '_videos', JSON.stringify(videos)); } catch(e) {}
-  }
-
-  function loadVideos(day) {
-    try { const s = localStorage.getItem('cf_' + day + '_videos'); return s ? JSON.parse(s) : []; }
-    catch { return []; }
-  }
-
-  // ─── Carga inicial ───────────────────────────────────────────────────────────
-  function loadDay(day) {
-    const keys = [...MAIN_SECS, ...NOTE_KEYS];
-    keys.forEach(k => {
-      const el = document.getElementById(day + '-' + k);
-      if (!el) return;
-      const saved = localStorage.getItem('cf_' + day + '_' + k);
-      el.textContent = (saved !== null) ? saved : (DEFAULTS[k] || '');
-    });
-
-    // Workout 2 visibilidad
-    const w2vis = localStorage.getItem('cf_' + day + '_w2visible');
-    if (w2vis === '1') {
-      const block = document.getElementById(day + '-w2-block');
-      const btn   = document.getElementById(day + '-w2-btn');
-      if (block) { block.classList.add('visible'); btn.classList.add('active'); btn.textContent = '✕ Quitar Workout 2'; }
-    }
-
-    renderVideos(day, loadVideos(day));
-  }
-
-  function init() {
-    // Construir paneles dinámicos
-    DAYS_TRAINING.forEach(day => {
-      buildDayPanel(day);
-      loadDay(day);
-    });
-
-    // Domingo
-    const domSaved = localStorage.getItem('cf_domingo_notas');
-    if (domSaved !== null) document.getElementById('domingo-notas').textContent = domSaved;
-
-    // Semana
-    const sem = localStorage.getItem('cf_semana');
-    if (sem) document.getElementById('semana-input').value = sem;
-  }
-
-  init();
+init();
 </script>
-
 </body>
 </html>
