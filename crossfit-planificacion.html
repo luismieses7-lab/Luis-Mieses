@@ -555,6 +555,59 @@
       font-size: 0.82rem; text-transform: uppercase; cursor: pointer;
     }
     .btn-cancel:hover { background: var(--bg-row); }
+
+    /* ── Botón PDF ── */
+    .pdf-btn {
+      display: flex; align-items: center; gap: 6px;
+      padding: 9px 16px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text-sec);
+      font-family: inherit;
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    .pdf-btn:hover { background: var(--bg-inner); color: var(--text); border-color: #bbb; }
+
+    /* ── Estilos de impresión ── */
+    @media print {
+      /* Ocultar todo excepto el panel activo */
+      .topbar, .days-nav, .modal-overlay, .url-modal,
+      .edit-btn, .save-btn, .pdf-btn,
+      .insert-vid-btn, .w2-toggle-row,
+      .note-bridge textarea,
+      .section-card textarea { display: none !important; }
+
+      /* Mostrar solo el panel activo */
+      .day-panel { display: none !important; }
+      .day-panel.active { display: block !important; }
+
+      /* Mostrar el texto de las notas siempre */
+      .note-bridge .note-text { display: block !important; }
+
+      body { background: #fff !important; }
+      main { padding: 12px !important; max-width: 100% !important; }
+
+      .section-card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        break-inside: avoid;
+        margin-bottom: 12px !important;
+      }
+
+      .note-bridge {
+        break-inside: avoid;
+        border: 1px dashed #e0c860 !important;
+      }
+
+      /* Forzar colores legibles en impresión */
+      * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
   </style>
 </head>
 <body>
@@ -762,6 +815,11 @@ function showDay(day, btn) {
   btn.classList.add('active');
 }
 
+// ─── Exportar PDF ─────────────────────────────────────────────────────────────
+function exportPDF() {
+  window.print();
+}
+
 // ─── Render de contenido ──────────────────────────────────────────────────────
 const PLAY_SVG = `<svg width="7" height="8" viewBox="0 0 7 8" fill="currentColor"><path d="M0 0L7 4 0 8z"/></svg>`;
 
@@ -869,7 +927,10 @@ function buildDayPanel(day) {
         <div class="day-label">${name} <span>/ ${sub}</span></div>
         <div class="day-sublabel">${sub}</div>
       </div>
-      <button class="edit-btn" id="${day}-edit-btn" onclick="toggleEdit('${day}')">✏️ Editar</button>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="pdf-btn" onclick="exportPDF()">⬇ PDF</button>
+        <button class="edit-btn" id="${day}-edit-btn" onclick="toggleEdit('${day}')">✏️ Editar</button>
+      </div>
     </div>
 
     ${secHTML(day,'calentamiento')}
