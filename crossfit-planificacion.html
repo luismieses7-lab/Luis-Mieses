@@ -33,14 +33,31 @@
       min-height: 100vh;
     }
 
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
+    /* ── Dot grid background ── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(56,189,248,0.07) 1px, transparent 1px);
+      background-size: 28px 28px;
     }
+    body > * { position: relative; z-index: 1; }
+
+    /* ── Custom scrollbar ── */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--bg-inner); border-radius: 6px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: #1a1a2e; border: 1px solid rgba(248,113,113,0.4);
+      color: #f87171; font-size: 0.8rem; font-weight: 700;
+      padding: 10px 20px; border-radius: 10px; z-index: 9999;
+      opacity: 0; transition: opacity 0.3s, transform 0.3s; pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: rgba(52,211,153,0.4); color: var(--green); background: rgba(52,211,153,0.08); }
 
     /* ── Topbar ── */
     .topbar {
@@ -48,9 +65,15 @@
       background: rgba(7,18,32,0.97);
       backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 0 rgba(200,245,0,0.08), 0 2px 20px rgba(0,0,0,0.4);
       padding: 0 24px;
       display: flex; align-items: center; justify-content: space-between;
       height: 62px; gap: 16px;
+    }
+    .topbar::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--lime), var(--blue), transparent);
+      opacity: 0.25;
     }
     .topbar-left { display: flex; flex-direction: column; }
     .topbar-title {
@@ -193,15 +216,33 @@
       border-radius: var(--radius);
       overflow: hidden; margin-bottom: 8px;
       box-shadow: var(--shadow);
-      position: relative; transition: border-color 0.2s;
+      position: relative;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
     }
     .section-card::before {
       content: ''; position: absolute;
       left: 0; top: 0; bottom: 0; width: 3px;
       background: transparent; transition: background 0.2s;
+      border-radius: 3px 0 0 3px;
     }
-    .section-card:hover { border-color: rgba(56,189,248,0.2); }
+    .section-card:hover {
+      border-color: rgba(56,189,248,0.28);
+      box-shadow: var(--shadow), 0 0 24px rgba(200,245,0,0.06), 0 0 1px rgba(200,245,0,0.15);
+      transform: translateY(-1px);
+    }
     .section-card:hover::before { background: var(--lime); }
+
+    /* stagger card entrance */
+    .day-panel.active .section-card { animation: cardIn 0.3s ease both; }
+    .day-panel.active .section-card:nth-child(1) { animation-delay: 0.00s; }
+    .day-panel.active .section-card:nth-child(2) { animation-delay: 0.05s; }
+    .day-panel.active .section-card:nth-child(3) { animation-delay: 0.10s; }
+    .day-panel.active .section-card:nth-child(4) { animation-delay: 0.15s; }
+    .day-panel.active .section-card:nth-child(5) { animation-delay: 0.20s; }
+    @keyframes cardIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
 
     .card-header {
       display: flex; align-items: center; gap: 14px;
@@ -433,6 +474,19 @@
     }
     .btn-cancel:hover { background: var(--bg-row); }
 
+    /* ── Mobile ── */
+    @media (max-width: 600px) {
+      .topbar { padding: 0 14px; height: 56px; }
+      .topbar-title { font-size: 0.9rem; }
+      main { padding: 16px 12px 60px; }
+      .day-label { font-size: 1.9rem; }
+      .card-body { padding: 14px 14px 14px 16px; }
+      .card-header { padding: 12px 14px 12px 16px; }
+      .day-header { flex-direction: column; align-items: flex-start; }
+      .video-thumb-item { width: 110px; }
+      .video-thumb-item img { height: 62px; }
+    }
+
     /* ── Impresión ── */
     @media print {
       .topbar, .days-nav, .modal-overlay, .url-modal,
@@ -450,6 +504,9 @@
   </style>
 </head>
 <body>
+
+<!-- Toast -->
+<div class="toast" id="app-toast"></div>
 
 <!-- Modal contraseña -->
 <div class="modal-overlay" id="pwd-modal">
@@ -544,6 +601,16 @@
 </main>
 
 <script>
+// ─── Toast helper ────────────────────────────────────────────────────────────
+let _toastTimer;
+function showToast(msg, type='error') {
+  const el = document.getElementById('app-toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (type==='success' ? ' success' : '');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => { el.classList.remove('show'); }, 3500);
+}
+
 // ─── Config ──────────────────────────────────────────────────────────────────
 const DAYS_TRAINING = ['lunes','martes','miercoles','jueves','viernes','sabado'];
 const DAYS_ALL      = [...DAYS_TRAINING,'domingo'];
@@ -668,7 +735,7 @@ function renderContent(raw) {
   let html = esc(raw);
   // Links inline: texto antes de [URL] o solo [URL]
   html = html.replace(/\[(https?:\/\/[^\]]+)\]/g,
-    (_,url) => `<a class="vid-link" href="${url}" target="_blank" rel="noopener noreferrer">${PLAY_SVG} ver video</a>`);
+    (_,url) => `<a class="vid-link" href="${url.replace(/"/g,'&quot;')}" target="_blank" rel="noopener noreferrer">${PLAY_SVG} ver video</a>`);
   // Saltos de línea
   html = html.replace(/\n/g,'<br>');
   return html;
@@ -850,20 +917,21 @@ function doSave(day) {
     display.style.display = '';
     if (vidbtn) vidbtn.classList.remove('visible');
     renderVideoThumbs(day, k, extractVideos(raw));
-    try { localStorage.setItem('cf_'+day+'_'+k, raw); } catch(e) {}
+    try { localStorage.setItem('cf_'+day+'_'+k, raw); } catch(e) { showToast('⚠ No se pudo guardar (almacenamiento lleno)'); }
   });
   NOTE_KEYS.forEach(k => {
     const d = document.getElementById(day+'-'+k);
     const t = document.getElementById(day+'-'+k+'-edit');
     if (!d||!t) return;
     d.textContent = t.value; t.style.display='none'; d.style.display='';
-    try { localStorage.setItem('cf_'+day+'_'+k, t.value); } catch(e) {}
+    try { localStorage.setItem('cf_'+day+'_'+k, t.value); } catch(e) { showToast('⚠ No se pudo guardar (almacenamiento lleno)'); }
   });
   document.getElementById('semana-input').setAttribute('readonly', true);
-  try { localStorage.setItem('cf_semana', document.getElementById('semana-input').value); } catch(e) {}
+  try { localStorage.setItem('cf_semana', document.getElementById('semana-input').value); } catch(e) { showToast('⚠ No se pudo guardar (almacenamiento lleno)'); }
   const btn = document.getElementById(day+'-edit-btn');
   if (btn) { btn.textContent = '✏️ Editar'; btn.className = 'edit-btn'; }
   editingState[day] = false;
+  showToast('✔ Guardado correctamente', 'success');
 }
 
 // ─── Workout 2 ────────────────────────────────────────────────────────────────
@@ -874,7 +942,7 @@ function toggleW2(day) {
     const vis   = block.classList.toggle('visible');
     btn.classList.toggle('active', vis);
     btn.textContent = vis ? '✕ Quitar Workout 2' : '＋ Agregar Workout 2';
-    try { localStorage.setItem('cf_'+day+'_w2visible', vis?'1':'0'); } catch(e) {}
+    try { localStorage.setItem('cf_'+day+'_w2visible', vis?'1':'0'); } catch(e) { showToast('⚠ No se pudo guardar (almacenamiento lleno)'); }
   });
 }
 
@@ -886,14 +954,15 @@ function toggleDomingo() {
     const t = document.getElementById('domingo-notas-edit');
     const b = document.getElementById('domingo-edit-btn');
     if (!editingDomingo) {
-      t.value = d.textContent || DOMINGO_DEFAULT;
+      const saved = localStorage.getItem('cf_domingo_notas');
+      t.value = saved !== null ? saved : DOMINGO_DEFAULT;
       d.style.display='none'; t.style.display='block';
       b.textContent='✔ Guardar'; b.className='save-btn';
       editingDomingo=true;
     } else {
       d.textContent=t.value; t.style.display='none'; d.style.display='';
       b.textContent='✏️ Editar notas'; b.className='edit-btn';
-      try { localStorage.setItem('cf_domingo_notas', t.value); } catch(e) {}
+      try { localStorage.setItem('cf_domingo_notas', t.value); showToast('✔ Guardado correctamente', 'success'); } catch(e) { showToast('⚠ No se pudo guardar (almacenamiento lleno)'); }
       editingDomingo=false;
     }
   });
@@ -964,7 +1033,7 @@ function loadDay(day) {
   if (localStorage.getItem('cf_'+day+'_w2visible')==='1') {
     const block=document.getElementById(day+'-w2-block');
     const btn=document.getElementById(day+'-w2-btn');
-    if (block) { block.classList.add('visible'); btn.classList.add('active'); btn.textContent='✕ Quitar Workout 2'; }
+    if (block && btn) { block.classList.add('visible'); btn.classList.add('active'); btn.textContent='✕ Quitar Workout 2'; }
   }
 }
 
