@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "CrossFit Coach",
+    "slug": "crossfit-coach",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "splash": {
+      "backgroundColor": "#071220"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.randy.crossfitcoach"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#071220"
+      },
+      "package": "com.randy.crossfitcoach"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "scheme": "crossfitcoach",
+    "newArchEnabled": true
+  }
+}
