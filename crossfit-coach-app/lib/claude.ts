@@ -195,7 +195,111 @@ Gestión de ansiedad competitiva: la ansiedad es energía disponible, no una se�
 Proceso vs Resultado: el resultado es consecuencia del proceso. Controla lo que puedes controlar.
 Post-WOD: analizar sin ego — ¿qué funcionó? ¿qué mejorar? Sin dramas.
 Virtuosismo: hacer lo ordinario extraordinariamente bien. Maestría básica antes de buscar lo avanzado.
+
+=== GUÍA CROSSFIT L2 — COACHING AVANZADO ===
+
+--- 6 ÁREAS DEL ENTRENADOR EFECTIVO (L2) ---
+Un entrenador CrossFit L2 domina 6 áreas. Una debilidad en cualquiera limita el resultado total:
+
+1. ENSEÑANZA: Articular mecánicas, enfocar en puntos clave antes que en los sutiles. Adaptar instrucciones a la capacidad del atleta. Regla: una sola cosa a la vez — "¿Qué es lo único que este atleta necesita ahora?" Usar progresiones (no explicar el movimiento completo de golpe). Comunicación efectiva: si el atleta falla, es responsabilidad del entrenador cambiar la estrategia.
+
+2. OBSERVACIÓN: Distinguir buena mecánica de mala, tanto estática (posición inicial, recepción, final) como dinámica (en movimiento entre posiciones). Fallas estáticas: más fáciles de ver (el atleta no se mueve). Fallas dinámicas: requieren experiencia — ver a uno a la vez, a una falla a la vez. Estrategia: estudiar videos en cámara lenta para entrenar el ojo.
+
+3. CORRECCIÓN: Indicaciones cortas, específicas y ejecutables. Proceso: 1) Identificar la falla 2) Nombrar la parte del cuerpo 3) Dar dirección ("llevar rodillas hacia afuera"). Triaje: corregir primero la falla con mayor riesgo de lesión. Estrategias: verbal (decir), visual (mostrar), táctil (tocar). Cuantas más opciones tenga el entrenador para cada falla, mayor probabilidad de éxito. Quedarse a evaluar el resultado de cada indicación — si no cambia nada, cambiar la indicación, nunca repetir una que no funcionó.
+
+4. MANEJO DE GRUPOS: Empezar y terminar puntual. Planificar distribución del espacio y equipo antes de la clase. Maximizar tiempo en movimiento del atleta, no tiempo de explicación. Dar atención individual a cada atleta — si no, la clase es demasiado grande para el entrenador. Newbies: clases de máximo 10 personas.
+
+5. PRESENCIA Y ACTITUD: Crear ambiente positivo y conexión genuina. No se simula: viene de pasión auténtica por el servicio. Conocer a cada cliente: saber qué pasa en sus vidas, detectar quién está bajo ese día. Los atletas no recuerdan los detalles técnicos — recuerdan si se sintieron bienvenidos, motivados e inspirados. Ser auténtico con la personalidad propia.
+
+6. DEMOSTRACIÓN: Usar el propio movimiento como herramienta de enseñanza. No requiere movimiento perfecto, sino consciencia de la propia mecánica. Liderar con el ejemplo: el entrenador sigue la misma programación, mismos estándares, misma nutrición.
+
+--- 8 TEMAS COMUNES DEL MOVIMIENTO (L2) ---
+Estos temas se aplican a TODOS los movimientos funcionales. Usarlos para evaluar y corregir:
+
+1. ESTABILIZACIÓN DE LA ZONA MEDIA: Mantener columna neutra (curva en S natural) durante todo el movimiento y bajo carga. La pérdida más peligrosa: columna lumbar en flexión bajo carga (hernias). Jerarquía de riesgo: zona media neutra (más segura) → posición no neutral estática → pérdida de neutro DURANTE el movimiento (más riesgosa). Indicación: "aprieta el abdomen como si recibieras un golpe".
+
+2. DE LA ZONA CENTRAL A LAS EXTREMIDADES: La fuerza siempre va del centro (core, caderas) hacia afuera (brazos, piernas). Nunca al revés. Falla dinámica: brazos o piernas se mueven ANTES de que cadera/core genere la fuerza (el "early pull" en clean/snatch es este error).
+
+3. EQUILIBRIO SOBRE EL PLANO FRONTAL: El atleta y el objeto deben moverse a lo largo del plano frontal (línea media del pie). Desviaciones hacia adelante = ineficiencia + riesgo. Ejemplo: barra en deadlift debe seguir cerca del cuerpo, no separarse.
+
+4. RECLUTAMIENTO DE LA CADENA POSTERIOR: Isquiotibiales + glúteos + erectores espinales. Se activa manteniendo peso en talones. Falla: peso cae a los dedos de los pies → extensión de cadera hacia adelante en lugar de hacia arriba → se pierde potencia. Rodillas en línea con los pies siempre.
+
+5. FUNCIÓN SÓLIDA DE CADERA: Extensión de cadera completa y potente es la base del rendimiento CrossFit. Tres fallas: cadera inactiva (nunca se cierra), extensión incompleta, extensión lenta. Cualquiera de las tres = pérdida de potencia. Sin problemas de seguridad por extensión lenta/incompleta, pero sí pérdida importante de rendimiento.
+
+6. HOMBROS ACTIVOS: En levantamientos overhead: empujar la barra hacia arriba activamente (OHS, press, jerk). En deadlifts y cleans: retraer escápulas sin exagerar. En pull-ups/rows: evitar hombros redondeados. Protege el manguito rotador y crea alineación óptima para transferir fuerza.
+
+7. RANGO COMPLETO DE MOVIMIENTO: Siempre buscar el rango anatómico natural. No hiperextender (más no siempre es mejor). Si hay un problema de seguridad más urgente, abordarlo primero; de lo contrario, el ROM completo tiene prioridad sobre carga y velocidad.
+
+8. POSICIÓN Y AGARRE EFECTIVOS: Posición angosta (ancho de caderas): deadlift, presses, olímpicos. Posición amplia (ancho de hombros): squats. Agarre: ligeramente por fuera de hombros o caderas según el movimiento. El valor de cualquier ajuste se evalúa por su efecto en los otros 7 temas.
+
+--- DÍAS PESADOS (L2) ---
+Los días de fuerza son ESENCIALES en CrossFit, no opcionales. Al menos 1 por semana o 1 cada 2 ciclos.
+Esquemas de repetición de trabajo: series de 1-5 reps, total 7-25 reps de trabajo.
+Intensidad: al o por encima del 80-85% del 1RM.
+Las series de calentamiento NO cuentan en el total.
+Esquemas comunes: 7×1, 5×3, 5×5, piramidal 1-2-3-2-1, descendente 5-4-3-2-1, EMOM.
+Para principiantes: pueden hacer más series (5-8) para establecer mecánica y construir máximo progresivamente.
+Importantísimo: enseñar técnica de seguridad (cómo salir de un levantamiento fallido) antes de cargas máximas.
+Indicaciones durante días pesados: MUY cortas y directas. El atleta solo puede concentrarse en 1-2 cosas.
+
+--- ESCALAMIENTO AVANZADO (L2) ---
+4 poblaciones con estrategias distintas:
+
+PRINCIPIANTES (0-6 meses): Prioridad = mecánica correcta en rango completo. Reducir carga, modificar movimiento si es necesario. Más reps de práctica > más carga. Necesitan mucha guía proactiva del coach.
+
+INTERMEDIOS (6 meses - 3 años): Algunos WODs RX, aún luchan con movimientos complejos o cargas altas. Variar opciones de escalamiento para continuar adaptando. Deben empezar a escalar sus propios entrenamientos con el tiempo.
+
+AVANZADOS (3+ años): Pueden hacer todos los WODs RX. Ocasionalmente escalar HACIA ARRIBA (más carga, variaciones más difíciles). Primero arreglar ineficiencias mecánicas y buscar más velocidad ANTES de aumentar peso o reps. Nunca confundir avanzado con élite (élite = CrossFit Games).
+
+LESIONADOS: Alentar a seguir entrenando dentro de sus posibilidades. Rango de movimiento sin dolor como guía principal. Trabajo de un solo miembro es válido. Omitir o sustituir como último recurso.
+
+Para escalar efectivamente, analizar el WOD original en:
+• Función del movimiento (push/pull/squat)
+• Parámetros de carga
+• Marco temporal (¿cuánto debe durar?)
+• Volumen de reps
+Escalar preservando el ESTÍMULO (duración y esfuerzo), no eliminándolo.
+
+--- DISEÑO DE PROGRAMACIÓN (L2) ---
+Evaluar efectividad por resultados medibles: PR en días pesados, tiempos mejorados, más rondas en AMRAPs.
+Evaluaciones de referencia periódicas: Fran, Helen, Diane, Fight Gone Bad, Grace, snatch/squat 1RM.
+Varianza = no aleatoriedad: la variación es INTENCIONAL para cubrir todos los dominios del fitness.
+Errores comunes del programador:
+1. No evaluar regularmente → no sabe si la programación funciona
+2. Varianza mal aplicada: aleatorizar sin plan, sesgar hacia ciertos elementos, énfasis en lo no esencial
+3. Ignorar habilidades gimnásticas avanzadas (handstand, muscle-up, planche)
+4. Volumen excesivo (dobles sesiones → sobreentrenamiento excepto en atletas elite)
+Regla de Greg Glassman: "Impresionarse por la INTENSIDAD, no por el VOLUMEN"
+
+Trabajo de debilidades: mejorar lo que está débil en relación a las fortalezas. Se puede incluir en el calentamiento. No cambiar drásticamente la programación, ajustes graduales.
+
+--- NUTRICIÓN — CAMBIO DE COMPORTAMIENTO (L2) ---
+Saber qué comer es solo la mitad. El verdadero desafío es implementar y mantener el cambio.
+
+AUTOEFICACIA: La creencia del atleta en su capacidad de cambiar es el factor más importante (Bandura).
+4 factores que aumentan la autoeficacia:
+• Experiencias maestras: pequeños pasos exitosos y celebrarlos ("agrega vegetales a cada comida")
+• Adaptación al estado emocional: ser sensible al estrés/miedo del atleta ante el cambio
+• Experiencias indirectas: historias de éxito de otros atletas ("si ella pudo, yo también")
+• Persuasión verbal/social: el coach dice "creo en tu capacidad de hacer esto"
+
+ETAPAS DEL CAMBIO:
+1. Contemplación: el atleta reconoce que debe cambiar. El coach educa con información simple y realizable.
+2. Acción: el cambio inició. El coach ofrece escalamiento gradual (eliminar un alimento malo a la vez, medir una comida antes que todas). Celebrar cada pequeña victoria.
+3. Mantenimiento: comportamiento saludable sostenido. El coach controla regularmente, ofrece apoyo social, ajusta estrategias si el atleta estancó.
+
+La nutrición se escala igual que los WODs: pasos pequeños, alcanzables, que construyen confianza progresivamente.
+El coach debe predicar con el ejemplo: comer bien, medir, experimentar la nutrición en primera persona.
+
+--- ESTRUCTURA DE CLASE EFECTIVA (L2) ---
+4 partes para una clase de 60 minutos:
+• Introducción (2-4 min): WOD en pizarra, estímulo previsto, opciones de escalamiento, preguntas
+• Calentamiento (15-20 min): general (movilidad, flujo cardio) + específico (movimientos del WOD, evaluación y asignación de escalamiento)
+• Pausa pre-WOD (2-3 min): seguridad, espacio, recordar escalamientos, reexplicar WOD
+• Entrenamiento: coaching en tiempo real — indicar, observar, corregir durante el WOD
+• Enfriamiento (5-10 min): movilidad, foam roll, registrar resultados, retroalimentación individual
 `;
+
 
 async function buildSystemPrompt(): Promise<string> {
   const [profile, l1Context, workouts, competitions, nutritionPlan] = await Promise.all([
