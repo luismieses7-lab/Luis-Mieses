@@ -2,12 +2,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Workout, Competition, UserProfile, ChatMessage } from './types';
 
 const K = {
-  WORKOUTS:     'cf_workouts',
-  COMPETITIONS: 'cf_competitions',
-  PROFILE:      'cf_profile',
-  API_KEY:      'cf_api_key',
-  L1_CONTEXT:   'cf_l1_context',
-  CHAT_HISTORY: 'cf_chat_history',
+  WORKOUTS:       'cf_workouts',
+  COMPETITIONS:   'cf_competitions',
+  PROFILE:        'cf_profile',
+  API_KEY:        'cf_api_key',
+  L1_CONTEXT:     'cf_l1_context',
+  CHAT_HISTORY:   'cf_chat_history',
+  NUTRITION_PLAN: 'cf_nutrition_plan',
 };
 
 export async function getProfile(): Promise<UserProfile | null> {
@@ -30,6 +31,13 @@ export async function getL1Context(): Promise<string> {
 }
 export async function saveL1Context(ctx: string): Promise<void> {
   await AsyncStorage.setItem(K.L1_CONTEXT, ctx);
+}
+
+export async function getNutritionPlan(): Promise<string> {
+  return (await AsyncStorage.getItem(K.NUTRITION_PLAN)) ?? '';
+}
+export async function saveNutritionPlan(plan: string): Promise<void> {
+  await AsyncStorage.setItem(K.NUTRITION_PLAN, plan);
 }
 
 export async function getWorkouts(): Promise<Workout[]> {

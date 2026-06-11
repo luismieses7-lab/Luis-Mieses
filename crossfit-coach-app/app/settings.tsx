@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { C } from '../constants/theme';
 import {
   getProfile, saveProfile, getApiKey, saveApiKey,
-  getL1Context, saveL1Context,
+  getL1Context, saveL1Context, getNutritionPlan, saveNutritionPlan,
 } from '../lib/storage';
 import type { UserProfile, AthleteLevel, NutritionGoal } from '../lib/types';
 
@@ -46,11 +46,12 @@ export default function SettingsScreen() {
   const [apiKey, setApiKey] = useState('');
   const [showKey, setShowKey] = useState(false);
   const [l1, setL1] = useState('');
+  const [nutritionPlanText, setNutritionPlanText] = useState('');
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     (async () => {
-      const [p, k, ctx] = await Promise.all([getProfile(), getApiKey(), getL1Context()]);
+      const [p, k, ctx, np] = await Promise.all([getProfile(), getApiKey(), getL1Context(), getNutritionPlan()]);
       if (p) {
         setName(p.name); setLevel(p.level); setGoals(p.goals);
         setYears(p.yearsTraining ?? ''); setBox(p.box ?? '');
@@ -60,6 +61,7 @@ export default function SettingsScreen() {
       }
       setApiKey(k);
       setL1(ctx);
+      setNutritionPlanText(np);
     })();
   }, []);
 
@@ -70,7 +72,7 @@ export default function SettingsScreen() {
       weightKg: weightKg.trim(), injuries: injuries.trim(),
       nutritionGoal, dietNotes: dietNotes.trim(),
     };
-    await Promise.all([saveProfile(profile), saveApiKey(apiKey.trim()), saveL1Context(l1)]);
+    await Promise.all([saveProfile(profile), saveApiKey(apiKey.trim()), saveL1Context(l1), saveNutritionPlan(nutritionPlanText)]);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -160,6 +162,26 @@ export default function SettingsScreen() {
                 <Ionicons name={showKey ? 'eye-off-outline' : 'eye-outline'} size={18} color={C.textSec}/>
               </TouchableOpacity>
             </View>
+          </View>
+
+          {/* Nutrition Plan */}
+          <View style={s.section}>
+            <Text style={s.sectionTitle}>PLAN NUTRICIONAL / TABLA DE PORCIONES</Text>
+            <Text style={s.sectionSub}>
+              Pega aquí tu plan nutricional personalizado con las porciones de cada alimento.
+              El coach usará esto para armar menús exactos con gramos reales (ej: "4 porciones de proteína = 120g pollo cocido").
+            </Text>
+            <TextInput
+              style={[s.input, s.l1Input]}
+              value={nutritionPlanText}
+              onChangeText={setNutritionPlanText}
+              multiline
+              placeholder={`Ejemplo de formato:\n\nPROTEÍNAS (1 porción = 7g proteína):\n- Pollo cocido: 30g\n- Carne res magra: 30g\n- Atún en agua: 30g\n- Huevo entero: 1 unidad\n\nCARBOHIDRATOS (1 porción = 9g carbs):\n- Arroz cocido: 45g\n- Avena seca: 20g\n- Batata cocida: 50g\n\nGRASAS (1 porción = 1.5g grasa):\n- Aguacate: 15g\n- Almendras: 3 unidades`}
+              placeholderTextColor={C.textDim}
+            />
+            {nutritionPlanText.length > 0 && (
+              <Text style={s.charCount}>{nutritionPlanText.length.toLocaleString()} caracteres cargados</Text>
+            )}
           </View>
 
           {/* CrossFit Context */}
