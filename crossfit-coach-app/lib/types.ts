@@ -25,6 +25,7 @@ export interface Competition {
 }
 
 export type AthleteLevel = 'Principiante' | 'Intermedio' | 'RX' | 'Elite';
+export type NutritionGoal = 'rendimiento' | 'composición' | 'competencia' | 'salud';
 
 export interface UserProfile {
   name: string;
@@ -32,6 +33,10 @@ export interface UserProfile {
   goals: string;
   yearsTraining?: string;
   box?: string;
+  weightKg?: string;
+  injuries?: string;
+  nutritionGoal?: NutritionGoal;
+  dietNotes?: string;
 }
 
 export interface ChatMessage {

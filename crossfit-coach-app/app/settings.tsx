@@ -11,9 +11,15 @@ import {
   getProfile, saveProfile, getApiKey, saveApiKey,
   getL1Context, saveL1Context,
 } from '../lib/storage';
-import type { UserProfile, AthleteLevel } from '../lib/types';
+import type { UserProfile, AthleteLevel, NutritionGoal } from '../lib/types';
 
 const LEVELS: AthleteLevel[] = ['Principiante','Intermedio','RX','Elite'];
+const NUTRITION_GOALS: { value: NutritionGoal; label: string }[] = [
+  { value: 'rendimiento', label: 'Rendimiento' },
+  { value: 'composición', label: 'Composición' },
+  { value: 'competencia', label: 'Competencia' },
+  { value: 'salud', label: 'Salud' },
+];
 
 const L1_PLACEHOLDER = `Pega aquí el contenido de tu CrossFit L1, L2 o cualquier material de entrenamiento.
 
@@ -33,6 +39,10 @@ export default function SettingsScreen() {
   const [goals, setGoals] = useState('');
   const [years, setYears] = useState('');
   const [box, setBox] = useState('');
+  const [weightKg, setWeightKg] = useState('');
+  const [injuries, setInjuries] = useState('');
+  const [nutritionGoal, setNutritionGoal] = useState<NutritionGoal>('rendimiento');
+  const [dietNotes, setDietNotes] = useState('');
   const [apiKey, setApiKey] = useState('');
   const [showKey, setShowKey] = useState(false);
   const [l1, setL1] = useState('');
@@ -41,14 +51,25 @@ export default function SettingsScreen() {
   useEffect(() => {
     (async () => {
       const [p, k, ctx] = await Promise.all([getProfile(), getApiKey(), getL1Context()]);
-      if (p) { setName(p.name); setLevel(p.level); setGoals(p.goals); setYears(p.yearsTraining??''); setBox(p.box??''); }
+      if (p) {
+        setName(p.name); setLevel(p.level); setGoals(p.goals);
+        setYears(p.yearsTraining ?? ''); setBox(p.box ?? '');
+        setWeightKg(p.weightKg ?? ''); setInjuries(p.injuries ?? '');
+        if (p.nutritionGoal) setNutritionGoal(p.nutritionGoal);
+        setDietNotes(p.dietNotes ?? '');
+      }
       setApiKey(k);
       setL1(ctx);
     })();
   }, []);
 
   const save = async () => {
-    const profile: UserProfile = { name: name.trim(), level, goals: goals.trim(), yearsTraining: years.trim(), box: box.trim() };
+    const profile: UserProfile = {
+      name: name.trim(), level, goals: goals.trim(),
+      yearsTraining: years.trim(), box: box.trim(),
+      weightKg: weightKg.trim(), injuries: injuries.trim(),
+      nutritionGoal, dietNotes: dietNotes.trim(),
+    };
     await Promise.all([saveProfile(profile), saveApiKey(apiKey.trim()), saveL1Context(l1)]);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
@@ -91,6 +112,33 @@ export default function SettingsScreen() {
 
             <Text style={s.label}>Años entrenando CrossFit</Text>
             <TextInput style={s.input} value={years} onChangeText={setYears} placeholder="Ej: 2 años" placeholderTextColor={C.textDim}/>
+
+            <Text style={s.label}>Peso corporal (kg)</Text>
+            <TextInput style={s.input} value={weightKg} onChangeText={setWeightKg}
+              placeholder="Ej: 78" placeholderTextColor={C.textDim} keyboardType="decimal-pad"/>
+
+            <Text style={s.label}>Lesiones / limitaciones físicas</Text>
+            <TextInput style={[s.input, s.textarea]} value={injuries} onChangeText={setInjuries} multiline
+              placeholder="Ej: hombro derecho, rodilla izquierda... (dejar en blanco si no hay)" placeholderTextColor={C.textDim}/>
+          </View>
+
+          {/* Nutrition */}
+          <View style={s.section}>
+            <Text style={s.sectionTitle}>NUTRICIÓN Y ALIMENTACIÓN</Text>
+
+            <Text style={s.label}>Objetivo nutricional</Text>
+            <View style={s.levelRow}>
+              {NUTRITION_GOALS.map(g => (
+                <TouchableOpacity key={g.value} style={[s.levelBtn, nutritionGoal===g.value && s.levelBtnOn]}
+                  onPress={() => setNutritionGoal(g.value)}>
+                  <Text style={[s.levelTxt, nutritionGoal===g.value && s.levelTxtOn]}>{g.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <Text style={s.label}>Notas de dieta / restricciones</Text>
+            <TextInput style={[s.input, s.textarea]} value={dietNotes} onChangeText={setDietNotes} multiline
+              placeholder="Ej: sin lactosa, vegetariano, como 4 veces al día, no como gluten..." placeholderTextColor={C.textDim}/>
           </View>
 
           {/* API Key */}
